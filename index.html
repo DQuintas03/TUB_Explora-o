@@ -1,447 +1,362 @@
 
 <style>
-h2.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
-*{box-sizing:border-box}
-.app{padding:1rem 0;font-size:14px}
-.tabs{display:flex;gap:4px;margin-bottom:1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
-.tab{padding:7px 14px;font-size:13px;cursor:pointer;border-radius:var(--border-radius-md) var(--border-radius-md) 0 0;border:0.5px solid transparent;color:var(--color-text-secondary);background:transparent;transition:all .15s}
-.tab.active{border-color:var(--color-border-secondary);border-bottom-color:var(--color-background-primary);color:var(--color-text-primary);font-weight:500;background:var(--color-background-primary)}
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+:root{
+  --tub:#009FD4;--tub-dark:#007BB5;--tub-pale:#EDF7FC;--tub-pale2:#D6EFF8;
+  --ink:#1C2B36;--ink2:#4A6070;--ink3:#8FA8B8;
+  --white:#FFFFFF;--surface:#F5F8FA;--border:#D4E6EF;--border2:#E8F1F5;
+  --ok:#16A34A;--warn:#D97706;--danger:#DC2626;
+  --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
+  --r:8px;
+}
+.app{font-family:var(--ff);color:var(--ink);background:var(--surface)}
+.topbar{background:var(--tub);padding:12px 20px;display:flex;align-items:center;gap:10px}
+.topbar-logo{font-family:var(--fm);font-size:15px;font-weight:500;color:var(--white);letter-spacing:-.5px;background:rgba(255,255,255,.15);padding:4px 9px;border-radius:5px}
+.topbar-sep{width:1px;height:16px;background:rgba(255,255,255,.25)}
+.topbar-title{font-size:13px;color:rgba(255,255,255,.8);font-weight:400}
+.tabs{background:var(--tub-dark);padding:0 20px;display:flex;gap:2px}
+.tab{padding:9px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;border:none;background:transparent;font-family:var(--ff);border-bottom:2px solid transparent;transition:all .15s}
+.tab.active{color:var(--white);border-bottom-color:var(--white)}
+.tab:hover:not(.active){color:rgba(255,255,255,.85)}
+.body{padding:20px}
 .panel{display:none}.panel.active{display:block}
-.section{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
-.section-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
-.field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:12px;color:var(--color-text-secondary)}
-input[type=text],input[type=number],input[type=time],select{width:100%;font-size:13px;padding:6px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
-input[type=range]{width:100%;margin:4px 0}
-.btn{padding:7px 16px;font-size:13px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;transition:all .15s}
-.btn:hover{background:var(--color-background-secondary)}
-.btn-primary{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
-.btn-primary:hover{opacity:.85}
-.btn-sm{padding:4px 10px;font-size:12px}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1rem}
-.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
-.metric-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
-.metric-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
-.metric-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
-.metric.highlight{border:1.5px solid var(--color-border-info);background:var(--color-background-info)}
-.metric.highlight .metric-val{color:var(--color-text-info)}
-.metric.warn{border:1.5px solid var(--color-border-warning);background:var(--color-background-warning)}
-.metric.warn .metric-val{color:var(--color-text-warning)}
-.metric.ok{border:1.5px solid var(--color-border-success);background:var(--color-background-success)}
-.metric.ok .metric-val{color:var(--color-text-success)}
-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
-thead tr{border-bottom:1.5px solid var(--color-border-primary)}
-thead th{padding:7px 8px;text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary)}
-tbody tr{border-bottom:0.5px solid var(--color-border-tertiary)}
-tbody tr:hover{background:var(--color-background-secondary)}
-td{padding:6px 8px;vertical-align:middle}
-.veh-badge{display:inline-block;font-size:11px;font-weight:500;padding:2px 7px;border-radius:4px}
-.note{font-size:12px;color:var(--color-text-tertiary);margin-top:.5rem}
-.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
-.sim-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem}
-.sim-card-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:.75rem}
-.result-line{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
-.result-line:last-child{border:none}
-.result-val{font-weight:500}
-.better{color:var(--color-text-success)}
-.worse{color:var(--color-text-danger)}
-.same{color:var(--color-text-secondary)}
-.slider-row{display:flex;align-items:center;gap:10px}
-.slider-val{font-size:13px;font-weight:500;min-width:28px;text-align:right;color:var(--color-text-primary)}
-.upload-area{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center;cursor:pointer;color:var(--color-text-secondary);font-size:13px;transition:all .15s}
-.upload-area:hover{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
-.tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;font-weight:500}
-.tag-blue{background:#E6F1FB;color:#0C447C}
-.tag-green{background:#EAF3DE;color:#27500A}
-.tag-amber{background:#FAEEDA;color:#633806}
-.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1rem 0}
+.card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:500;color:var(--ink2)}
+input[type=text],input[type=number],input[type=time],select{font-family:var(--ff);font-size:13px;padding:7px 10px;border:0.5px solid var(--border);border-radius:6px;background:var(--white);color:var(--ink);outline:none;width:100%;transition:border .15s}
+input:focus,select:focus{border-color:var(--tub)}
+input[readonly]{background:var(--tub-pale);color:var(--tub-dark);font-weight:600}
+.metric{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.metric.blue{background:var(--tub);border-color:var(--tub)}
+.metric.ok{background:#F0FDF4;border-color:#86EFAC}
+.metric.warn{background:#FFFBEB;border-color:#FCD34D}
+.metric-label{font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:3px}
+.metric.blue .metric-label{color:rgba(255,255,255,.7)}
+.metric-val{font-size:20px;font-weight:600;color:var(--ink);font-family:var(--fm)}
+.metric.blue .metric-val{color:var(--white)}
+.metric.ok .metric-val{color:var(--ok)}
+.metric.warn .metric-val{color:var(--warn)}
+.metric-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.metric.blue .metric-sub{color:rgba(255,255,255,.6)}
+.btn{font-family:var(--ff);font-size:13px;font-weight:500;padding:8px 18px;border-radius:6px;cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--ink);transition:all .15s}
+.btn:hover{background:var(--surface)}
+.btn-primary{background:var(--tub);color:var(--white);border-color:var(--tub)}
+.btn-primary:hover{background:var(--tub-dark)}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+input[type=range]{width:100%;accent-color:var(--tub)}
+.slider-row{display:flex;align-items:center;gap:8px}
+.slider-row .edge{font-size:12px;color:var(--ink3);min-width:20px}
+.slider-live{font-size:15px;font-weight:600;color:var(--tub);font-family:var(--fm);min-width:36px;text-align:right}
+.alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px;border-left:3px solid}
+.alert-warn{background:#FFFBEB;border-color:var(--warn);color:#92400E}
+.alert-info{background:var(--tub-pale);border-color:var(--tub);color:var(--tub-dark)}
+.compare-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.compare-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.compare-card.proposed{border-color:var(--tub);border-width:1.5px}
+.compare-head{font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.compare-head.prop{color:var(--tub)}
+.rline{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border2);font-size:13px}
+.rline:last-child{border:none}
+.rkey{color:var(--ink2)}
+.rval{font-weight:600;font-family:var(--fm);font-size:13px}
+.better{color:var(--ok)}.worse{color:var(--danger)}.same{color:var(--ink3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{border-bottom:1.5px solid var(--tub)}
+thead th{padding:8px 10px;text-align:left;font-weight:500;font-size:12px;color:var(--tub);background:var(--tub-pale)}
+tbody tr{border-bottom:0.5px solid var(--border2)}
+tbody tr:hover{background:var(--tub-pale)}
+td{padding:7px 10px;color:var(--ink)}
+.vbadge{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;font-family:var(--fm)}
+.upload-area{border:1.5px dashed var(--border);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;color:var(--ink3);font-size:13px;transition:all .15s}
+.upload-area:hover{border-color:var(--tub);background:var(--tub-pale);color:var(--tub)}
+.sched-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.legend{display:flex;gap:6px;flex-wrap:wrap}
+.note-text{font-size:12px;color:var(--ink3);margin-top:2px}
 </style>
 
 <div class="app">
-<h2 class="sr-only">Optimizador de frota e horários para linhas de transportes urbanos</h2>
-
+<h2 class="sr-only">Optimizador de frota e horários — TUB</h2>
+<div class="topbar">
+  <span class="topbar-logo">TUB</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-title">Optimizador de Frota e Horários</span>
+</div>
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('base')">1. Linha base</button>
-  <button class="tab" onclick="switchTab('sim')">2. Simulação</button>
-  <button class="tab" onclick="switchTab('sched')">3. Horário gerado</button>
+  <button class="tab active" onclick="switchTab('base')">Linha base</button>
+  <button class="tab" onclick="switchTab('sim')">Simulação</button>
+  <button class="tab" onclick="switchTab('sched')">Horário</button>
 </div>
 
+<div class="body">
+
 <div id="tab-base" class="panel active">
-  <div class="section">
-    <div class="section-title">Identificação da linha</div>
-    <div class="field-row">
-      <div class="field"><label>Número / nome da linha</label><input type="text" id="line-name" placeholder="ex: 943" value="943"></div>
-      <div class="field"><label>Descrição do percurso</label><input type="text" id="line-desc" placeholder="ex: Estação CF – Universidade do Minho" value="Estação CF – Universidade do Minho"></div>
+  <div class="card">
+    <div class="card-title">Identificação</div>
+    <div class="grid2">
+      <div class="field"><label>Número / nome da linha</label><input type="text" id="line-name" value="943"></div>
+      <div class="field"><label>Percurso</label><input type="text" id="line-desc" value="Estação CF – Universidade do Minho"></div>
     </div>
   </div>
-
-  <div class="section">
-    <div class="section-title">Parâmetros do percurso</div>
-    <div class="field-row-3">
+  <div class="card">
+    <div class="card-title">Parâmetros do percurso</div>
+    <div class="grid3" style="margin-bottom:12px">
       <div class="field"><label>Tempo de ida (min)</label><input type="number" id="t-ida" value="25" min="1" max="180" oninput="updateDerived()"></div>
       <div class="field"><label>Tempo de volta (min)</label><input type="number" id="t-volta" value="25" min="1" max="180" oninput="updateDerived()"></div>
-      <div class="field"><label>Ciclo total (min)</label><input type="number" id="t-ciclo" value="50" min="1" max="360" style="background:var(--color-background-secondary)" readonly></div>
+      <div class="field"><label>Ciclo total (min)</label><input type="number" id="t-ciclo" value="50" readonly></div>
     </div>
-    <div class="field-row-3">
+    <div class="grid3" style="margin-bottom:14px">
       <div class="field"><label>Hora de início</label><input type="time" id="t-inicio" value="21:00" oninput="updateDerived()"></div>
       <div class="field"><label>Hora de fim</label><input type="time" id="t-fim" value="01:40" oninput="updateDerived()"></div>
       <div class="field"><label>Viaturas actuais</label><input type="number" id="v-atual" value="1" min="1" max="20" oninput="updateDerived()"></div>
     </div>
-    <div class="metrics" id="base-metrics"></div>
-    <p class="note" id="base-note"></p>
+    <div class="grid4" id="base-metrics"></div>
+    <p class="note-text" id="base-note"></p>
   </div>
-
-  <div class="section">
-    <div class="section-title">Ou importa via CSV</div>
-    <div class="upload-area" onclick="document.getElementById('csv-input').click()">
-      <i class="ti ti-upload" style="font-size:20px;display:block;margin-bottom:6px" aria-hidden="true"></i>
+  <div class="card">
+    <div class="card-title">Importar via CSV</div>
+    <div class="upload-area" onclick="document.getElementById('csv-in').click()">
+      <i class="ti ti-upload" style="font-size:22px;display:block;margin-bottom:6px" aria-hidden="true"></i>
       Clica para carregar ficheiro CSV<br>
-      <span style="font-size:11px">Colunas esperadas: partida, chegada_destino, regresso_origem</span>
+      <span style="font-size:11px">Colunas: partida · chegada_destino · regresso_origem &nbsp;|&nbsp; formato HH:MM</span>
     </div>
-    <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleCSV(this)">
-    <div id="csv-feedback" style="font-size:12px;color:var(--color-text-secondary);margin-top:6px"></div>
+    <input type="file" id="csv-in" accept=".csv" style="display:none" onchange="handleCSV(this)">
+    <div id="csv-msg" style="font-size:12px;margin-top:8px;font-weight:500"></div>
   </div>
-
   <button class="btn btn-primary" onclick="switchTab('sim');renderSim()">Avançar para simulação →</button>
 </div>
 
 <div id="tab-sim" class="panel">
-  <div class="sim-grid">
-    <div class="sim-card">
-      <div class="sim-card-title">Cenário actual</div>
-      <div id="atual-summary"></div>
-    </div>
-    <div class="sim-card">
-      <div class="sim-card-title">Cenário proposto</div>
-      <div id="prop-summary"></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Modo de simulação</div>
-    <div class="field-row" style="margin-bottom:.75rem">
-      <div class="field">
-        <label>O que quero fixar</label>
+  <div class="card">
+    <div class="card-title">Configuração</div>
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="field"><label>Modo de simulação</label>
         <select id="sim-mode" onchange="renderSim()">
-          <option value="veh">Fixar nº de viaturas → calcular frequência</option>
-          <option value="freq">Fixar frequência → calcular viaturas necessárias</option>
-          <option value="both">Explorar livremente ambos os parâmetros</option>
+          <option value="veh">Fixar viaturas → ver frequência</option>
+          <option value="freq">Fixar frequência → calcular viaturas</option>
+          <option value="both">Explorar livremente ambos</option>
         </select>
       </div>
-      <div class="field">
-        <label>Hora de início (nova)</label>
-        <input type="time" id="sim-inicio" value="21:00" oninput="renderSim()">
+      <div class="field"><label>Nova hora de início</label><input type="time" id="sim-inicio" value="21:00" oninput="renderSim()"></div>
+    </div>
+    <div id="ctrl-veh">
+      <div class="field" style="margin-bottom:4px">
+        <label>Número de viaturas — <span id="veh-lv" style="color:var(--tub);font-weight:600;font-family:var(--fm)">2</span></label>
+        <div class="slider-row">
+          <span class="edge">1</span>
+          <input type="range" id="sim-veh" min="1" max="20" value="2" step="1" oninput="document.getElementById('veh-lv').textContent=this.value;renderSim()">
+          <span class="edge">20</span>
+        </div>
       </div>
     </div>
-
-    <div id="sim-veh-ctrl">
-      <label style="font-size:12px;color:var(--color-text-secondary)">Número de viaturas: <span id="sim-veh-val" style="font-weight:500;color:var(--color-text-primary)">2</span></label>
-      <div class="slider-row" style="margin-top:4px">
-        <span style="font-size:12px;color:var(--color-text-tertiary)">1</span>
-        <input type="range" id="sim-veh" min="1" max="20" value="2" step="1" oninput="document.getElementById('sim-veh-val').textContent=this.value;renderSim()">
-        <span style="font-size:12px;color:var(--color-text-tertiary)">20</span>
-      </div>
-    </div>
-
-    <div id="sim-freq-ctrl" style="display:none">
-      <label style="font-size:12px;color:var(--color-text-secondary)">Frequência desejada: <span id="sim-freq-val" style="font-weight:500;color:var(--color-text-primary)">30</span> min</label>
-      <div class="slider-row" style="margin-top:4px">
-        <span style="font-size:12px;color:var(--color-text-tertiary)">5</span>
-        <input type="range" id="sim-freq" min="5" max="60" value="30" step="1" oninput="document.getElementById('sim-freq-val').textContent=this.value;renderSim()">
-        <span style="font-size:12px;color:var(--color-text-tertiary)">60</span>
+    <div id="ctrl-freq" style="display:none">
+      <div class="field" style="margin-bottom:4px">
+        <label>Frequência desejada — <span id="freq-lv" style="color:var(--tub);font-weight:600;font-family:var(--fm)">30</span> min</label>
+        <div class="slider-row">
+          <span class="edge">5</span>
+          <input type="range" id="sim-freq" min="5" max="120" value="30" step="1" oninput="document.getElementById('freq-lv').textContent=this.value;renderSim()">
+          <span class="edge">120</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="metrics" id="sim-metrics"></div>
-  <div id="sim-warning" style="font-size:13px;padding:8px 12px;border-radius:var(--border-radius-md);margin-bottom:1rem;display:none"></div>
+  <div class="compare-wrap">
+    <div class="compare-card"><div class="compare-head">Actual</div><div id="cur-sum"></div></div>
+    <div class="compare-card proposed"><div class="compare-head prop">Proposto</div><div id="prop-sum"></div></div>
+  </div>
 
+  <div class="grid4" id="sim-metrics"></div>
+  <div id="sim-alert" style="display:none"></div>
   <button class="btn btn-primary" onclick="switchTab('sched');renderSchedule()">Ver horário completo →</button>
 </div>
 
 <div id="tab-sched" class="panel">
-  <div class="metrics" id="sched-metrics" style="margin-bottom:1rem"></div>
-  <div id="sched-legend" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem;font-size:12px;color:var(--color-text-secondary)"></div>
-  <table>
-    <thead>
-      <tr>
-        <th style="width:16%">Partida</th>
-        <th style="width:12%">Viatura</th>
+  <div class="grid4" id="sched-metrics" style="margin-bottom:14px"></div>
+  <div class="sched-top">
+    <div class="legend" id="sched-legend"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary btn-sm" onclick="exportXLSX()"><i class="ti ti-download" aria-hidden="true"></i> Exportar XLSX</button>
+      <button class="btn btn-sm" onclick="switchTab('sim')">← Simulação</button>
+    </div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <table>
+      <thead><tr>
+        <th style="width:15%">Partida</th>
+        <th style="width:13%">Viatura</th>
         <th style="width:18%">Chegada destino</th>
         <th style="width:18%">Regresso origem</th>
-        <th style="width:36%">Observações</th>
-      </tr>
-    </thead>
-    <tbody id="sched-body"></tbody>
-  </table>
-  <div style="margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap">
-    <button class="btn btn-sm" onclick="exportCSV()"><i class="ti ti-download" aria-hidden="true"></i> Exportar CSV</button>
-    <button class="btn btn-sm" onclick="switchTab('sim')">← Voltar à simulação</button>
+        <th>Observações</th>
+      </tr></thead>
+      <tbody id="sched-body"></tbody>
+    </table>
   </div>
 </div>
+
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const VEH_COLORS=[
-  {bg:'#E6F1FB',text:'#0C447C'},
-  {bg:'#EAF3DE',text:'#27500A'},
-  {bg:'#EEEDFE',text:'#3C3489'},
-  {bg:'#FAEEDA',text:'#633806'},
-  {bg:'#FAECE7',text:'#712B13'},
-  {bg:'#FBEAF0',text:'#72243E'},
-  {bg:'#E1F5EE',text:'#085041'},
-  {bg:'#F1EFE8',text:'#444441'},
-];
-
-const toMin=s=>{
-  if(!s||!s.includes(':')) return 0;
-  const [h,m]=s.split(':').map(Number);
-  return h<6?h*60+m+1440:h*60+m;
-};
-const toStr=m=>{
-  const mm=((m%1440)+1440)%1440;
-  return String(Math.floor(mm/60)).padStart(2,'0')+':'+String(mm%60).padStart(2,'0');
-};
-
-function getBase(){
-  return {
-    name:document.getElementById('line-name').value||'Linha',
-    desc:document.getElementById('line-desc').value||'',
-    tIda:parseInt(document.getElementById('t-ida').value)||25,
-    tVolta:parseInt(document.getElementById('t-volta').value)||25,
-    inicio:document.getElementById('t-inicio').value||'21:00',
-    fim:document.getElementById('t-fim').value||'01:40',
-    vAtual:parseInt(document.getElementById('v-atual').value)||1,
-  };
-}
-
-function calcFreq(ciclo,veh){ return Math.round(ciclo/veh*10)/10; }
-function calcVeh(ciclo,freq){ return Math.ceil(ciclo/freq); }
-function calcTrips(inicioMin,fimMin,freq){
-  let t=inicioMin,count=0;
-  const fimAdj=fimMin<inicioMin?fimMin+1440:fimMin;
-  while(t<=fimAdj){count++;t+=freq;}
-  return count;
-}
+const VS=[{bg:'#DBEAFE',tc:'#1E3A8A'},{bg:'#D1FAE5',tc:'#064E3B'},{bg:'#EDE9FE',tc:'#3730A3'},{bg:'#FEF3C7',tc:'#78350F'},{bg:'#FCE7F3',tc:'#831843'},{bg:'#CFFAFE',tc:'#164E63'},{bg:'#FEE2E2',tc:'#7F1D1D'},{bg:'#F3F4F6',tc:'#111827'}];
+const LB='ABCDEFGHIJKLMNOPQRST';
+const toMin=s=>{if(!s||!s.includes(':'))return 0;const[h,m]=s.split(':').map(Number);return h<6?h*60+m+1440:h*60+m;};
+const toStr=m=>{const mm=((m%1440)+1440)%1440;return String(Math.floor(mm/60)).padStart(2,'0')+':'+String(mm%60).padStart(2,'0');};
+const ff=f=>Number.isInteger(f)?f:f.toFixed(1);
+const calcF=(c,v)=>Math.round(c/v*10)/10;
+const calcV=(c,f)=>Math.ceil(c/f);
+function calcT(ini,fim,freq){let t=ini,n=0;const fa=fim<ini?fim+1440:fim;while(t<=fa){n++;t+=freq;}return n;}
+function getB(){return{name:document.getElementById('line-name').value||'Linha',desc:document.getElementById('line-desc').value||'',tI:parseInt(document.getElementById('t-ida').value)||25,tV:parseInt(document.getElementById('t-volta').value)||25,ini:document.getElementById('t-inicio').value||'21:00',fim:document.getElementById('t-fim').value||'01:40',vA:parseInt(document.getElementById('v-atual').value)||1};}
 
 function updateDerived(){
-  const b=getBase();
-  const ciclo=b.tIda+b.tVolta;
-  document.getElementById('t-ciclo').value=ciclo;
-  const freq=calcFreq(ciclo,b.vAtual);
-  const ini=toMin(b.inicio);
-  const fim=toMin(b.fim);
-  const trips=calcTrips(ini,fim,freq);
-  const fimAdj=fim<ini?fim+1440:fim;
-  const durH=Math.round((fimAdj-ini)/60*10)/10;
-
-  const mc=document.getElementById('base-metrics');
-  mc.innerHTML=`
-    <div class="metric"><div class="metric-label">Ciclo total</div><div class="metric-val">${ciclo} min</div></div>
-    <div class="metric"><div class="metric-label">Frequência actual</div><div class="metric-val">${Number.isInteger(freq)?freq:freq.toFixed(1)} min</div></div>
-    <div class="metric"><div class="metric-label">Viagens/dia</div><div class="metric-val">${trips}</div></div>
-    <div class="metric"><div class="metric-label">Duração serviço</div><div class="metric-val">${durH}h</div></div>
-  `;
-  document.getElementById('base-note').textContent=
-    `Ciclo de ${ciclo} min com ${b.vAtual} viatura${b.vAtual>1?'s':''} resulta em frequência de ${Number.isInteger(freq)?freq:freq.toFixed(1)} minutos.`;
+  const b=getB();const c=b.tI+b.tV;
+  document.getElementById('t-ciclo').value=c;
+  const f=calcF(c,b.vA);
+  const ini=toMin(b.ini);const fim=toMin(b.fim);
+  const fa=fim<ini?fim+1440:fim;
+  const trips=calcT(ini,fim,f);
+  const durH=Math.round((fa-ini)/60*10)/10;
+  document.getElementById('base-metrics').innerHTML=`
+    <div class="metric blue"><div class="metric-label">Ciclo total</div><div class="metric-val">${c} min</div></div>
+    <div class="metric"><div class="metric-label">Frequência actual</div><div class="metric-val">${ff(f)} min</div></div>
+    <div class="metric"><div class="metric-label">Viagens / dia</div><div class="metric-val">${trips}</div></div>
+    <div class="metric"><div class="metric-label">Duração serviço</div><div class="metric-val">${durH}h</div></div>`;
+  document.getElementById('base-note').textContent=`Ciclo de ${c} min com ${b.vA} viatura${b.vA>1?'s':''} → frequência de ${ff(f)} min.`;
 }
 
 function switchTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>{
-    const ids=['base','sim','sched'];
-    t.classList.toggle('active',ids[i]===id);
+  ['base','sim','sched'].forEach((t,i)=>{
+    document.querySelectorAll('.tab')[i].classList.toggle('active',t===id);
+    document.getElementById('tab-'+t).classList.toggle('active',t===id);
   });
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
 }
 
 function renderSim(){
-  const b=getBase();
-  const ciclo=b.tIda+b.tVolta;
+  const b=getB();const c=b.tI+b.tV;
   const mode=document.getElementById('sim-mode').value;
-  const simInicio=document.getElementById('sim-inicio').value||b.inicio;
-
-  document.getElementById('sim-veh-ctrl').style.display=(mode==='freq')?'none':'block';
-  document.getElementById('sim-freq-ctrl').style.display=(mode==='veh')?'none':'block';
-
-  const freqAtual=calcFreq(ciclo,b.vAtual);
-  const iniMin=toMin(b.inicio);
-  const fimMin=toMin(b.fim);
-  const simIniMin=toMin(simInicio);
-
-  const as=document.getElementById('atual-summary');
-  as.innerHTML=`
-    <div class="result-line"><span>Viaturas</span><span class="result-val">${b.vAtual}</span></div>
-    <div class="result-line"><span>Ciclo</span><span class="result-val">${ciclo} min</span></div>
-    <div class="result-line"><span>Frequência</span><span class="result-val">${Number.isInteger(freqAtual)?freqAtual:freqAtual.toFixed(1)} min</span></div>
-    <div class="result-line"><span>Início</span><span class="result-val">${b.inicio}</span></div>
-    <div class="result-line"><span>Fim</span><span class="result-val">${b.fim}</span></div>
-  `;
-
-  let propVeh,propFreq,propFreqReal;
-
-  if(mode==='veh'){
-    propVeh=parseInt(document.getElementById('sim-veh').value)||2;
-    propFreqReal=calcFreq(ciclo,propVeh);
-    propFreq=propFreqReal;
-  } else if(mode==='freq'){
-    propFreq=parseInt(document.getElementById('sim-freq').value)||30;
-    propVeh=calcVeh(ciclo,propFreq);
-    propFreqReal=calcFreq(ciclo,propVeh);
-  } else {
-    propVeh=parseInt(document.getElementById('sim-veh').value)||2;
-    propFreq=parseInt(document.getElementById('sim-freq').value)||30;
-    propFreqReal=calcFreq(ciclo,propVeh);
-  }
-
-  const propTrips=calcTrips(simIniMin,fimMin,propFreqReal);
-  const atualTrips=calcTrips(iniMin,fimMin,freqAtual);
-  const freqDiff=propFreqReal-freqAtual;
-  const vehDiff=propVeh-b.vAtual;
-
-  const freqClass=freqDiff<0?'better':freqDiff>0?'worse':'same';
-  const vehClass=vehDiff>0?'worse':vehDiff<0?'better':'same';
-
-  const ps=document.getElementById('prop-summary');
-  ps.innerHTML=`
-    <div class="result-line"><span>Viaturas</span><span class="result-val ${vehClass}">${propVeh} ${vehDiff!==0?'('+(vehDiff>0?'+':'')+vehDiff+')':''}</span></div>
-    <div class="result-line"><span>Ciclo</span><span class="result-val">${ciclo} min</span></div>
-    <div class="result-line"><span>Frequência real</span><span class="result-val ${freqClass}">${Number.isInteger(propFreqReal)?propFreqReal:propFreqReal.toFixed(1)} min ${freqDiff!==0?'('+(freqDiff>0?'+':'')+Math.round(freqDiff*10)/10+')':''}</span></div>
-    <div class="result-line"><span>Início</span><span class="result-val">${simInicio}</span></div>
-    <div class="result-line"><span>Fim</span><span class="result-val">${b.fim}</span></div>
-  `;
-
-  const warn=document.getElementById('sim-warning');
-  if(mode==='freq' && propFreqReal!==propFreq){
-    warn.style.display='block';
-    warn.style.background='var(--color-background-warning)';
-    warn.style.color='var(--color-text-warning)';
-    warn.style.borderLeft='3px solid var(--color-border-warning)';
-    warn.textContent=`⚠ Com ${propVeh} viatura${propVeh>1?'s':''} e ciclo de ${ciclo} min, a frequência real é ${Number.isInteger(propFreqReal)?propFreqReal:propFreqReal.toFixed(1)} min (não exactamente ${propFreq} min). Para ${propFreq} min exactos seria necessário um ciclo de ${propVeh*propFreq} min.`;
-  } else if(mode==='both'){
-    const cicloNecessario=propVeh*propFreq;
-    if(cicloNecessario!==ciclo){
-      warn.style.display='block';
-      warn.style.background='var(--color-background-info)';
-      warn.style.color='var(--color-text-info)';
-      warn.style.borderLeft='3px solid var(--color-border-info)';
-      warn.textContent=`ℹ Para ${propVeh} viaturas com frequência exacta de ${propFreq} min, o ciclo teria de ser ${cicloNecessario} min (actual: ${ciclo} min). A frequência real com o ciclo actual é ${Number.isInteger(propFreqReal)?propFreqReal:propFreqReal.toFixed(1)} min.`;
-    } else {
-      warn.style.display='none';
-    }
-  } else {
-    warn.style.display='none';
-  }
-
-  const mc=document.getElementById('sim-metrics');
-  const freqMClass=freqDiff<0?'ok':freqDiff>0?'warn':'';
-  mc.innerHTML=`
-    <div class="metric ${freqMClass}"><div class="metric-label">Frequência proposta</div><div class="metric-val">${Number.isInteger(propFreqReal)?propFreqReal:propFreqReal.toFixed(1)} min</div><div class="metric-sub">${freqDiff===0?'igual':freqDiff<0?'↑ melhoria de '+(Math.round(-freqDiff*10)/10)+' min':'↓ degradação de '+(Math.round(freqDiff*10)/10)+' min'}</div></div>
-    <div class="metric"><div class="metric-label">Viaturas propostas</div><div class="metric-val">${propVeh}</div><div class="metric-sub">${vehDiff===0?'sem alteração':vehDiff>0?'+ '+vehDiff+' viatura'+(vehDiff>1?'s':''):'- '+Math.abs(vehDiff)+' viatura'+(Math.abs(vehDiff)>1?'s':'')}</div></div>
-    <div class="metric"><div class="metric-label">Viagens/dia</div><div class="metric-val">${propTrips}</div><div class="metric-sub">${propTrips-atualTrips===0?'igual':(propTrips-atualTrips>0?'+':'')+( propTrips-atualTrips)+' face ao actual'}</div></div>
-    <div class="metric"><div class="metric-label">Início</div><div class="metric-val">${simInicio}</div><div class="metric-sub">${simInicio!==b.inicio?'alterado de '+b.inicio:'igual ao actual'}</div></div>
-  `;
-
-  window._simState={propVeh,propFreqReal,simInicio,ciclo,b,fimMin:toMin(b.fim)};
+  const sI=document.getElementById('sim-inicio').value||b.ini;
+  document.getElementById('ctrl-veh').style.display=mode==='freq'?'none':'block';
+  document.getElementById('ctrl-freq').style.display=mode==='veh'?'none':'block';
+  const fA=calcF(c,b.vA);
+  const tA=calcT(toMin(b.ini),toMin(b.fim),fA);
+  let pV,pF,pFR;
+  if(mode==='veh'){pV=parseInt(document.getElementById('sim-veh').value)||2;pFR=calcF(c,pV);pF=pFR;}
+  else if(mode==='freq'){pF=parseInt(document.getElementById('sim-freq').value)||30;pV=calcV(c,pF);pFR=calcF(c,pV);}
+  else{pV=parseInt(document.getElementById('sim-veh').value)||2;pF=parseInt(document.getElementById('sim-freq').value)||30;pFR=calcF(c,pV);}
+  const pT=calcT(toMin(sI),toMin(b.fim),pFR);
+  const fd=pFR-fA;const vd=pV-b.vA;
+  const fdc=fd<0?'better':fd>0?'worse':'same';
+  const vdc=vd>0?'worse':vd<0?'better':'same';
+  document.getElementById('cur-sum').innerHTML=`
+    <div class="rline"><span class="rkey">Viaturas</span><span class="rval">${b.vA}</span></div>
+    <div class="rline"><span class="rkey">Ciclo</span><span class="rval">${c} min</span></div>
+    <div class="rline"><span class="rkey">Frequência</span><span class="rval">${ff(fA)} min</span></div>
+    <div class="rline"><span class="rkey">Início</span><span class="rval">${b.ini}</span></div>
+    <div class="rline"><span class="rkey">Fim</span><span class="rval">${b.fim}</span></div>
+    <div class="rline"><span class="rkey">Viagens/dia</span><span class="rval">${tA}</span></div>`;
+  document.getElementById('prop-sum').innerHTML=`
+    <div class="rline"><span class="rkey">Viaturas</span><span class="rval ${vdc}">${pV}${vd!==0?' ('+(vd>0?'+':'')+vd+')':''}</span></div>
+    <div class="rline"><span class="rkey">Ciclo</span><span class="rval">${c} min</span></div>
+    <div class="rline"><span class="rkey">Frequência real</span><span class="rval ${fdc}">${ff(pFR)} min${fd!==0?' ('+(fd>0?'+':'')+Math.round(fd*10)/10+')':''}</span></div>
+    <div class="rline"><span class="rkey">Início</span><span class="rval">${sI}</span></div>
+    <div class="rline"><span class="rkey">Fim</span><span class="rval">${b.fim}</span></div>
+    <div class="rline"><span class="rkey">Viagens/dia</span><span class="rval">${pT}</span></div>`;
+  const fmc=fd<0?'ok':fd>0?'warn':'';
+  document.getElementById('sim-metrics').innerHTML=`
+    <div class="metric ${fmc}"><div class="metric-label">Frequência proposta</div><div class="metric-val">${ff(pFR)} min</div><div class="metric-sub">${fd===0?'sem alteração':fd<0?'↑ melhoria de '+Math.abs(Math.round(fd*10)/10)+' min':'↓ degradação de '+Math.round(fd*10)/10+' min'}</div></div>
+    <div class="metric"><div class="metric-label">Viaturas</div><div class="metric-val">${pV}</div><div class="metric-sub">${vd===0?'sem alteração':vd>0?'+ '+vd+' viatura'+(vd>1?'s':''):'− '+Math.abs(vd)+' viatura'+(Math.abs(vd)>1?'s':'')}</div></div>
+    <div class="metric"><div class="metric-label">Viagens / dia</div><div class="metric-val">${pT}</div><div class="metric-sub">${pT-tA===0?'igual':(pT-tA>0?'+':'')+( pT-tA)+' face ao actual'}</div></div>
+    <div class="metric blue"><div class="metric-label">Início</div><div class="metric-val" style="font-size:17px">${sI}</div><div class="metric-sub">${sI!==b.ini?'alterado de '+b.ini:'igual ao actual'}</div></div>`;
+  const al=document.getElementById('sim-alert');
+  if(mode==='freq'&&pFR!==pF){al.style.display='block';al.className='alert alert-warn';al.textContent=`⚠ Com ${pV} viatura${pV>1?'s':''} e ciclo de ${c} min, a frequência real é ${ff(pFR)} min — não exactamente ${pF} min. Para ${pF} min exactos o ciclo teria de ser ${pV*pF} min.`;}
+  else if(mode==='both'&&pV*pF!==c){al.style.display='block';al.className='alert alert-info';al.textContent=`ℹ Para ${pV} viaturas com frequência exacta de ${pF} min, o ciclo necessário seria ${pV*pF} min (actual: ${c} min). Frequência real com o ciclo actual: ${ff(pFR)} min.`;}
+  else{al.style.display='none';}
+  window._sim={pV,pFR,sI,c,b,fimMin:toMin(b.fim)};
 }
 
 function renderSchedule(){
-  const st=window._simState;
-  if(!st){renderSim();return;}
-  const {propVeh,propFreqReal,simInicio,ciclo,b}=st;
-  const fimMin=toMin(b.fim);
-  const iniMin=toMin(simInicio);
-  const fimAdj=fimMin<iniMin?fimMin+1440:fimMin;
-
-  const mc=document.getElementById('sched-metrics');
-  mc.innerHTML=`
-    <div class="metric"><div class="metric-label">Linha</div><div class="metric-val" style="font-size:16px">${b.name}</div><div class="metric-sub">${b.desc}</div></div>
-    <div class="metric"><div class="metric-label">Viaturas</div><div class="metric-val">${propVeh}</div></div>
-    <div class="metric"><div class="metric-label">Frequência</div><div class="metric-val">${Number.isInteger(propFreqReal)?propFreqReal:propFreqReal.toFixed(1)} min</div></div>
-    <div class="metric"><div class="metric-label">Serviço</div><div class="metric-val" style="font-size:15px">${simInicio}–${b.fim}</div></div>
-  `;
-
-  const legend=document.getElementById('sched-legend');
-  legend.innerHTML='';
-  for(let i=0;i<propVeh;i++){
-    const c=VEH_COLORS[i%VEH_COLORS.length];
-    legend.innerHTML+=`<span style="background:${c.bg};color:${c.text};font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px">Viatura ${String.fromCharCode(65+i)}</span>`;
-  }
-
+  const st=window._sim;if(!st){renderSim();return;}
+  const{pV,pFR,sI,c,b}=st;
+  const fim=toMin(b.fim);const ini=toMin(sI);
+  const fa=fim<ini?fim+1440:fim;
+  const pT=calcT(ini,fim,pFR);
+  document.getElementById('sched-metrics').innerHTML=`
+    <div class="metric blue"><div class="metric-label">Linha</div><div class="metric-val" style="font-size:17px">${b.name}</div><div class="metric-sub">${b.desc}</div></div>
+    <div class="metric"><div class="metric-label">Viaturas</div><div class="metric-val">${pV}</div></div>
+    <div class="metric"><div class="metric-label">Frequência</div><div class="metric-val">${ff(pFR)} min</div></div>
+    <div class="metric"><div class="metric-label">Serviço</div><div class="metric-val" style="font-size:15px">${sI} – ${b.fim}</div><div class="metric-sub">${pT} viagens</div></div>`;
+  const leg=document.getElementById('sched-legend');
+  leg.innerHTML='';
+  for(let i=0;i<pV;i++){const s=VS[i%VS.length];leg.innerHTML+=`<span class="vbadge" style="background:${s.bg};color:${s.tc}">Viatura ${LB[i]}</span>`;}
   const tbody=document.getElementById('sched-body');
-  tbody.innerHTML='';
-
-  let t=iniMin;
-  let vIdx=0;
-  const freq=propFreqReal;
-  window._schedRows=[];
-
-  while(t<=fimAdj){
-    const dep=t;
-    const arr=t+b.tIda;
-    const ret=t+ciclo;
-    const vLabel=String.fromCharCode(65+vIdx%propVeh);
-    const c=VEH_COLORS[vIdx%propVeh];
-    const isLast=t+freq>fimAdj;
-
-    const obs=isLast?'<span style="font-size:11px;color:var(--color-text-tertiary)">último serviço</span>':'';
+  tbody.innerHTML='';window._rows=[];
+  let t=ini,vi=0;
+  while(t<=fa){
+    const dep=t,arr=t+b.tI,ret=t+c;
+    const vl=LB[vi%pV];const vc=VS[vi%pV];
+    const isLast=t+pFR>fa;
     const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td style="font-weight:500">${toStr(dep)}</td>
-      <td><span class="veh-badge" style="background:${c.bg};color:${c.text}">Viat. ${vLabel}</span></td>
-      <td>${toStr(arr)}</td>
-      <td>${ret<=fimAdj+freq?toStr(ret):'—'}</td>
-      <td>${obs}</td>
-    `;
+    tr.innerHTML=`<td style="font-weight:600;font-family:var(--fm)">${toStr(dep)}</td>
+      <td><span class="vbadge" style="background:${vc.bg};color:${vc.tc}">Viat. ${vl}</span></td>
+      <td style="font-family:var(--fm)">${toStr(arr)}</td>
+      <td style="font-family:var(--fm)">${ret<=fa+pFR?toStr(ret):'—'}</td>
+      <td style="color:var(--ink3);font-size:12px">${isLast?'Último serviço':''}</td>`;
     tbody.appendChild(tr);
-    window._schedRows.push({partida:toStr(dep),viatura:vLabel,chegada:toStr(arr),regresso:ret<=fimAdj+freq?toStr(ret):'—'});
-    vIdx++;
-    t+=freq;
+    window._rows.push({'Partida (origem)':toStr(dep),'Viatura':vl,'Chegada (destino)':toStr(arr),'Regresso (origem)':ret<=fa+pFR?toStr(ret):'—','Observações':isLast?'Último serviço':''});
+    vi++;t+=pFR;
   }
 }
 
-function exportCSV(){
-  if(!window._schedRows||!window._schedRows.length) return;
-  const b=getBase();
-  const lines=['Partida,Viatura,Chegada destino,Regresso origem'];
-  window._schedRows.forEach(r=>lines.push(`${r.partida},${r.viatura},${r.chegada},${r.regresso}`));
-  const blob=new Blob([lines.join('\n')],{type:'text/csv'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`horario_${b.name.replace(/\s/g,'_')}.csv`;
-  a.click();
+function exportXLSX(){
+  if(!window._rows||!window._rows.length){alert('Gera primeiro o horário.');return;}
+  const st=window._sim;const b=st.b;
+  const wb=XLSX.utils.book_new();
+  const wsData=[
+    ['Linha',b.name,'','Percurso',b.desc],
+    ['Viaturas',st.pV,'','Frequência (min)',ff(st.pFR)],
+    ['Início',st.sI,'','Fim',b.fim],
+    ['Tempo ida (min)',b.tI,'','Tempo volta (min)',b.tV],
+    [],
+    Object.keys(window._rows[0]),
+    ...window._rows.map(r=>Object.values(r)),
+  ];
+  const ws=XLSX.utils.aoa_to_sheet(wsData);
+  ws['!cols']=[{wch:20},{wch:10},{wch:20},{wch:20},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,ws,'Horário');
+  const ws2=XLSX.utils.aoa_to_sheet([['Parâmetro','Valor'],['Linha',b.name],['Percurso',b.desc],['Tempo ida (min)',b.tI],['Tempo volta (min)',b.tV],['Ciclo total (min)',b.tI+b.tV],['Viaturas propostas',st.pV],['Frequência real (min)',st.pFR],['Hora início',st.sI],['Hora fim',b.fim]]);
+  ws2['!cols']=[{wch:24},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Parâmetros');
+  XLSX.writeFile(wb,`horario_${b.name.replace(/\s/g,'_')}.xlsx`);
 }
 
-function handleCSV(input){
-  const file=input.files[0];
-  if(!file) return;
+function handleCSV(inp){
+  const file=inp.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
     const lines=e.target.result.trim().split('\n');
-    const fb=document.getElementById('csv-feedback');
-    if(lines.length<2){fb.textContent='Ficheiro vazio ou inválido.';return;}
+    const msg=document.getElementById('csv-msg');
     const rows=lines.slice(1).map(l=>l.split(/[,;]/)).filter(r=>r.length>=3);
-    if(!rows.length){fb.textContent='Sem dados válidos. Verifica o separador (vírgula ou ponto e vírgula).';return;}
-    const times=rows.map(r=>r[0].trim()).filter(t=>t.includes(':'));
-    if(times.length<2){fb.textContent='Não foi possível detectar horários. Verifica o formato (HH:MM).';return;}
-    const t1=toMin(rows[0][0].trim());
-    const t2=toMin(rows[1][0].trim());
-    const freq=t2-t1;
-    const ida=rows[0][1]?toMin(rows[0][1].trim())-t1:null;
+    if(!rows.length){msg.textContent='Sem dados válidos.';msg.style.color='var(--danger)';return;}
+    const t0=toMin(rows[0][0].trim());
+    const t1=rows.length>1?toMin(rows[1][0].trim()):t0+25;
+    const ida=rows[0][1]?toMin(rows[0][1].trim())-t0:null;
     const volta=rows[0][2]?toMin(rows[0][2].trim())-toMin(rows[0][1].trim()):null;
-    if(ida&&ida>0) document.getElementById('t-ida').value=ida;
-    if(volta&&volta>0) document.getElementById('t-volta').value=volta;
+    if(ida&&ida>0)document.getElementById('t-ida').value=ida;
+    if(volta&&volta>0)document.getElementById('t-volta').value=volta;
     document.getElementById('t-inicio').value=rows[0][0].trim();
     document.getElementById('t-fim').value=rows[rows.length-1][0].trim();
     updateDerived();
-    fb.textContent=`✓ ${rows.length} viagens importadas. Frequência detectada: ${freq} min. Ida: ${ida||'?'} min, volta: ${volta||'?'} min.`;
-    fb.style.color='var(--color-text-success)';
+    msg.innerHTML=`✓ ${rows.length} viagens importadas — frequência detectada: ${t1-t0} min.`;
+    msg.style.color='var(--ok)';
   };
   reader.readAsText(file);
 }
 
-updateDerived();
-renderSim();
+updateDerived();renderSim();
 </script>
