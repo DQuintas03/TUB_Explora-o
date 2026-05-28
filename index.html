@@ -8,14 +8,13 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
   --ink:#1C2B36;--ink2:#4A6070;--ink3:#8FA8B8;
   --white:#FFFFFF;--surface:#F5F8FA;--border:#D4E6EF;--border2:#E8F1F5;
   --ok:#16A34A;--warn:#D97706;--danger:#DC2626;
-  --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
-  --r:8px;
+  --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--r:8px;
 }
 .app{font-family:var(--ff);color:var(--ink);background:var(--surface)}
 .topbar{background:var(--tub);padding:12px 20px;display:flex;align-items:center;gap:10px}
-.topbar-logo{font-family:var(--fm);font-size:15px;font-weight:500;color:var(--white);letter-spacing:-.5px;background:rgba(255,255,255,.15);padding:4px 9px;border-radius:5px}
+.topbar-logo{font-family:var(--fm);font-size:15px;font-weight:500;color:var(--white);background:rgba(255,255,255,.15);padding:4px 9px;border-radius:5px}
 .topbar-sep{width:1px;height:16px;background:rgba(255,255,255,.25)}
-.topbar-title{font-size:13px;color:rgba(255,255,255,.8);font-weight:400}
+.topbar-title{font-size:13px;color:rgba(255,255,255,.85)}
 .tabs{background:var(--tub-dark);padding:0 20px;display:flex;gap:2px}
 .tab{padding:9px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;border:none;background:transparent;font-family:var(--ff);border-bottom:2px solid transparent;transition:all .15s}
 .tab.active{color:var(--white);border-bottom-color:var(--white)}
@@ -26,22 +25,32 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
 .card-title{font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.grid5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;font-weight:500;color:var(--ink2)}
-input[type=text],input[type=number],input[type=time],select{font-family:var(--ff);font-size:13px;padding:7px 10px;border:0.5px solid var(--border);border-radius:6px;background:var(--white);color:var(--ink);outline:none;width:100%;transition:border .15s}
-input:focus,select:focus{border-color:var(--tub)}
+input[type=text],input[type=number],input[type=time]{font-family:var(--ff);font-size:13px;padding:7px 10px;border:0.5px solid var(--border);border-radius:6px;background:var(--white);color:var(--ink);outline:none;width:100%;transition:border .15s}
+input:focus{border-color:var(--tub)}
 input[readonly]{background:var(--tub-pale);color:var(--tub-dark);font-weight:600}
-.metric{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.scenario-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.scenario{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:16px}
+.scenario.a{border-top:3px solid var(--ink3)}
+.scenario.b{border-top:3px solid var(--tub)}
+.scenario-title{font-size:12px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.badge-a{background:var(--surface);color:var(--ink2);font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+.badge-b{background:var(--tub-pale);color:var(--tub-dark);font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+.metric{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:11px 13px}
 .metric.blue{background:var(--tub);border-color:var(--tub)}
 .metric.ok{background:#F0FDF4;border-color:#86EFAC}
 .metric.warn{background:#FFFBEB;border-color:#FCD34D}
+.metric.danger{background:#FEF2F2;border-color:#FCA5A5}
 .metric-label{font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:3px}
 .metric.blue .metric-label{color:rgba(255,255,255,.7)}
-.metric-val{font-size:20px;font-weight:600;color:var(--ink);font-family:var(--fm)}
+.metric-val{font-size:18px;font-weight:600;color:var(--ink);font-family:var(--fm)}
 .metric.blue .metric-val{color:var(--white)}
 .metric.ok .metric-val{color:var(--ok)}
 .metric.warn .metric-val{color:var(--warn)}
+.metric.danger .metric-val{color:var(--danger)}
 .metric-sub{font-size:11px;color:var(--ink3);margin-top:2px}
 .metric.blue .metric-sub{color:rgba(255,255,255,.6)}
 .btn{font-family:var(--ff);font-size:13px;font-weight:500;padding:8px 18px;border-radius:6px;cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--ink);transition:all .15s}
@@ -50,156 +59,144 @@ input[readonly]{background:var(--tub-pale);color:var(--tub-dark);font-weight:600
 .btn-primary:hover{background:var(--tub-dark)}
 .btn-sm{padding:5px 12px;font-size:12px}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap}
-input[type=range]{width:100%;accent-color:var(--tub)}
-.slider-row{display:flex;align-items:center;gap:8px}
-.slider-row .edge{font-size:12px;color:var(--ink3);min-width:20px}
-.slider-live{font-size:15px;font-weight:600;color:var(--tub);font-family:var(--fm);min-width:36px;text-align:right}
-.alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px;border-left:3px solid}
-.alert-warn{background:#FFFBEB;border-color:var(--warn);color:#92400E}
-.alert-info{background:var(--tub-pale);border-color:var(--tub);color:var(--tub-dark)}
-.compare-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.compare-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px}
-.compare-card.proposed{border-color:var(--tub);border-width:1.5px}
-.compare-head{font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
-.compare-head.prop{color:var(--tub)}
-.rline{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border2);font-size:13px}
-.rline:last-child{border:none}
-.rkey{color:var(--ink2)}
-.rval{font-weight:600;font-family:var(--fm);font-size:13px}
-.better{color:var(--ok)}.worse{color:var(--danger)}.same{color:var(--ink3)}
-table{width:100%;border-collapse:collapse;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:12px}
 thead tr{border-bottom:1.5px solid var(--tub)}
-thead th{padding:8px 10px;text-align:left;font-weight:500;font-size:12px;color:var(--tub);background:var(--tub-pale)}
+thead th{padding:7px 9px;text-align:left;font-weight:500;font-size:11px;color:var(--tub);background:var(--tub-pale)}
 tbody tr{border-bottom:0.5px solid var(--border2)}
 tbody tr:hover{background:var(--tub-pale)}
-td{padding:7px 10px;color:var(--ink)}
-.vbadge{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;font-family:var(--fm)}
-.upload-area{border:1.5px dashed var(--border);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;color:var(--ink3);font-size:13px;transition:all .15s}
-.upload-area:hover{border-color:var(--tub);background:var(--tub-pale);color:var(--tub)}
-.sched-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.legend{display:flex;gap:6px;flex-wrap:wrap}
-.note-text{font-size:12px;color:var(--ink3);margin-top:2px}
+td{padding:6px 9px;color:var(--ink)}
+.vbadge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;font-family:var(--fm)}
+.comp-table-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.comp-section-title{font-size:11px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.delta-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.delta-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.delta-label{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
+.delta-val{font-size:16px;font-weight:600;font-family:var(--fm)}
+.delta-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.better{color:var(--ok)}.worse{color:var(--danger)}.neutral{color:var(--ink3)}
+.alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px;border-left:3px solid}
+.alert-info{background:var(--tub-pale);border-color:var(--tub);color:var(--tub-dark)}
+.divider{border:none;border-top:0.5px solid var(--border2);margin:14px 0}
 </style>
 
 <div class="app">
-<h2 class="sr-only">Optimizador de frota e horários — TUB</h2>
+<h2 class="sr-only">Optimizador de frota TUB — comparação de cenários</h2>
 <div class="topbar">
   <span class="topbar-logo">TUB</span>
   <div class="topbar-sep"></div>
   <span class="topbar-title">Optimizador de Frota e Horários</span>
 </div>
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('base')">Linha base</button>
-  <button class="tab" onclick="switchTab('sim')">Simulação</button>
-  <button class="tab" onclick="switchTab('sched')">Horário</button>
+  <button class="tab active" onclick="switchTab('config')">Configuração</button>
+  <button class="tab" onclick="switchTab('horarios')">Horários</button>
+  <button class="tab" onclick="switchTab('comparacao')">Comparação</button>
 </div>
 
 <div class="body">
 
-<div id="tab-base" class="panel active">
+<div id="tab-config" class="panel active">
   <div class="card">
-    <div class="card-title">Identificação</div>
+    <div class="card-title">Identificação da linha</div>
     <div class="grid2">
-      <div class="field"><label>Número / nome da linha</label><input type="text" id="line-name" value="943"></div>
+      <div class="field"><label>Número / nome</label><input type="text" id="line-name" value="943"></div>
       <div class="field"><label>Percurso</label><input type="text" id="line-desc" value="Estação CF – Universidade do Minho"></div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-title">Parâmetros do percurso</div>
-    <div class="grid3" style="margin-bottom:12px">
-      <div class="field"><label>Tempo de ida (min)</label><input type="number" id="t-ida" value="25" min="1" max="180" oninput="updateDerived()"></div>
-      <div class="field"><label>Tempo de volta (min)</label><input type="number" id="t-volta" value="25" min="1" max="180" oninput="updateDerived()"></div>
-      <div class="field"><label>Ciclo total (min)</label><input type="number" id="t-ciclo" value="50" readonly></div>
+
+  <div class="scenario-wrap">
+    <div class="scenario a">
+      <div class="scenario-title"><span class="badge-a">Cenário A</span> Actual</div>
+      <div class="grid3" style="margin-bottom:10px">
+        <div class="field"><label>Tempo ida (min)</label><input type="number" id="a-ida" value="15" min="1" oninput="updateScenario('a')"></div>
+        <div class="field"><label>Tempo volta (min)</label><input type="number" id="a-volta" value="15" min="1" oninput="updateScenario('a')"></div>
+        <div class="field"><label>Ciclo (min)</label><input type="number" id="a-ciclo" readonly></div>
+      </div>
+      <div class="grid3" style="margin-bottom:10px">
+        <div class="field"><label>Viaturas</label><input type="number" id="a-veh" value="1" min="1" oninput="updateScenario('a')"></div>
+        <div class="field"><label>Início</label><input type="time" id="a-inicio" value="21:00" oninput="updateScenario('a')"></div>
+        <div class="field"><label>Fim</label><input type="time" id="a-fim" value="01:30" oninput="updateScenario('a')"></div>
+      </div>
+      <div class="grid2" style="margin-bottom:10px">
+        <div class="field"><label>Kms ida</label><input type="number" id="a-km-ida" value="4.2" step="0.1" min="0" oninput="updateScenario('a')"></div>
+        <div class="field"><label>Kms volta</label><input type="number" id="a-km-volta" value="4.2" step="0.1" min="0" oninput="updateScenario('a')"></div>
+      </div>
+      <div class="grid4" id="a-metrics" style="margin-top:4px"></div>
     </div>
-    <div class="grid3" style="margin-bottom:14px">
-      <div class="field"><label>Hora de início</label><input type="time" id="t-inicio" value="21:00" oninput="updateDerived()"></div>
-      <div class="field"><label>Hora de fim</label><input type="time" id="t-fim" value="01:40" oninput="updateDerived()"></div>
-      <div class="field"><label>Viaturas actuais</label><input type="number" id="v-atual" value="1" min="1" max="20" oninput="updateDerived()"></div>
+
+    <div class="scenario b">
+      <div class="scenario-title"><span class="badge-b">Cenário B</span> Proposto</div>
+      <div class="grid3" style="margin-bottom:10px">
+        <div class="field"><label>Tempo ida (min)</label><input type="number" id="b-ida" value="25" min="1" oninput="updateScenario('b')"></div>
+        <div class="field"><label>Tempo volta (min)</label><input type="number" id="b-volta" value="25" min="1" oninput="updateScenario('b')"></div>
+        <div class="field"><label>Ciclo (min)</label><input type="number" id="b-ciclo" readonly></div>
+      </div>
+      <div class="grid3" style="margin-bottom:10px">
+        <div class="field"><label>Viaturas</label><input type="number" id="b-veh" value="2" min="1" oninput="updateScenario('b')"></div>
+        <div class="field"><label>Início</label><input type="time" id="b-inicio" value="21:00" oninput="updateScenario('b')"></div>
+        <div class="field"><label>Fim</label><input type="time" id="b-fim" value="01:40" oninput="updateScenario('b')"></div>
+      </div>
+      <div class="grid2" style="margin-bottom:10px">
+        <div class="field"><label>Kms ida</label><input type="number" id="b-km-ida" value="6.5" step="0.1" min="0" oninput="updateScenario('b')"></div>
+        <div class="field"><label>Kms volta</label><input type="number" id="b-km-volta" value="6.5" step="0.1" min="0" oninput="updateScenario('b')"></div>
+      </div>
+      <div class="grid4" id="b-metrics" style="margin-top:4px"></div>
     </div>
-    <div class="grid4" id="base-metrics"></div>
-    <p class="note-text" id="base-note"></p>
   </div>
-  <div class="card">
-    <div class="card-title">Importar via CSV</div>
-    <div class="upload-area" onclick="document.getElementById('csv-in').click()">
-      <i class="ti ti-upload" style="font-size:22px;display:block;margin-bottom:6px" aria-hidden="true"></i>
-      Clica para carregar ficheiro CSV<br>
-      <span style="font-size:11px">Colunas: partida · chegada_destino · regresso_origem &nbsp;|&nbsp; formato HH:MM</span>
-    </div>
-    <input type="file" id="csv-in" accept=".csv" style="display:none" onchange="handleCSV(this)">
-    <div id="csv-msg" style="font-size:12px;margin-top:8px;font-weight:500"></div>
-  </div>
-  <button class="btn btn-primary" onclick="switchTab('sim');renderSim()">Avançar para simulação →</button>
+
+  <button class="btn btn-primary" onclick="generateAll()">Gerar horários e comparação →</button>
 </div>
 
-<div id="tab-sim" class="panel">
-  <div class="card">
-    <div class="card-title">Configuração</div>
-    <div class="grid2" style="margin-bottom:14px">
-      <div class="field"><label>Modo de simulação</label>
-        <select id="sim-mode" onchange="renderSim()">
-          <option value="veh">Fixar viaturas → ver frequência</option>
-          <option value="freq">Fixar frequência → calcular viaturas</option>
-          <option value="both">Explorar livremente ambos</option>
-        </select>
-      </div>
-      <div class="field"><label>Nova hora de início</label><input type="time" id="sim-inicio" value="21:00" oninput="renderSim()"></div>
-    </div>
-    <div id="ctrl-veh">
-      <div class="field" style="margin-bottom:4px">
-        <label>Número de viaturas — <span id="veh-lv" style="color:var(--tub);font-weight:600;font-family:var(--fm)">2</span></label>
-        <div class="slider-row">
-          <span class="edge">1</span>
-          <input type="range" id="sim-veh" min="1" max="20" value="2" step="1" oninput="document.getElementById('veh-lv').textContent=this.value;renderSim()">
-          <span class="edge">20</span>
-        </div>
+<div id="tab-horarios" class="panel">
+  <div class="comp-table-wrap">
+    <div>
+      <div class="comp-section-title"><span class="badge-a">Cenário A</span> <span id="h-a-title" style="color:var(--ink2);font-weight:400;font-size:11px"></span></div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+        <tbody id="tbody-a"></tbody></table>
       </div>
     </div>
-    <div id="ctrl-freq" style="display:none">
-      <div class="field" style="margin-bottom:4px">
-        <label>Frequência desejada — <span id="freq-lv" style="color:var(--tub);font-weight:600;font-family:var(--fm)">30</span> min</label>
-        <div class="slider-row">
-          <span class="edge">5</span>
-          <input type="range" id="sim-freq" min="5" max="120" value="30" step="1" oninput="document.getElementById('freq-lv').textContent=this.value;renderSim()">
-          <span class="edge">120</span>
-        </div>
+    <div>
+      <div class="comp-section-title"><span class="badge-b">Cenário B</span> <span id="h-b-title" style="color:var(--ink2);font-weight:400;font-size:11px"></span></div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+        <tbody id="tbody-b"></tbody></table>
       </div>
     </div>
-  </div>
-
-  <div class="compare-wrap">
-    <div class="compare-card"><div class="compare-head">Actual</div><div id="cur-sum"></div></div>
-    <div class="compare-card proposed"><div class="compare-head prop">Proposto</div><div id="prop-sum"></div></div>
-  </div>
-
-  <div class="grid4" id="sim-metrics"></div>
-  <div id="sim-alert" style="display:none"></div>
-  <button class="btn btn-primary" onclick="switchTab('sched');renderSchedule()">Ver horário completo →</button>
-</div>
-
-<div id="tab-sched" class="panel">
-  <div class="grid4" id="sched-metrics" style="margin-bottom:14px"></div>
-  <div class="sched-top">
-    <div class="legend" id="sched-legend"></div>
-    <div class="btn-row">
-      <button class="btn btn-primary btn-sm" onclick="exportXLSX()"><i class="ti ti-download" aria-hidden="true"></i> Exportar XLSX</button>
-      <button class="btn btn-sm" onclick="switchTab('sim')">← Simulação</button>
-    </div>
-  </div>
-  <div class="card" style="padding:0;overflow:hidden">
-    <table>
-      <thead><tr>
-        <th style="width:15%">Partida</th>
-        <th style="width:13%">Viatura</th>
-        <th style="width:18%">Chegada destino</th>
-        <th style="width:18%">Regresso origem</th>
-        <th>Observações</th>
-      </tr></thead>
-      <tbody id="sched-body"></tbody>
-    </table>
   </div>
 </div>
 
+<div id="tab-comparacao" class="panel">
+  <div class="card">
+    <div class="card-title">Indicadores — delta A → B</div>
+    <div class="delta-grid" id="delta-grid"></div>
+    <div class="divider"></div>
+    <div class="card-title">Quilómetros</div>
+    <div class="delta-grid" id="km-grid"></div>
+  </div>
+
+  <div class="comp-table-wrap">
+    <div>
+      <div class="comp-section-title"><span class="badge-a">Cenário A</span></div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+        <tbody id="comp-tbody-a"></tbody></table>
+      </div>
+    </div>
+    <div>
+      <div class="comp-section-title"><span class="badge-b">Cenário B</span></div>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+        <tbody id="comp-tbody-b"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px">
+    <button class="btn btn-primary btn-sm" onclick="exportXLSX()"><i class="ti ti-download" aria-hidden="true"></i> Exportar relatório XLSX</button>
+  </div>
+</div>
+
+</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -208,155 +205,186 @@ const VS=[{bg:'#DBEAFE',tc:'#1E3A8A'},{bg:'#D1FAE5',tc:'#064E3B'},{bg:'#EDE9FE',
 const LB='ABCDEFGHIJKLMNOPQRST';
 const toMin=s=>{if(!s||!s.includes(':'))return 0;const[h,m]=s.split(':').map(Number);return h<6?h*60+m+1440:h*60+m;};
 const toStr=m=>{const mm=((m%1440)+1440)%1440;return String(Math.floor(mm/60)).padStart(2,'0')+':'+String(mm%60).padStart(2,'0');};
-const ff=f=>Number.isInteger(f)?f:f.toFixed(1);
-const calcF=(c,v)=>Math.round(c/v*10)/10;
-const calcV=(c,f)=>Math.ceil(c/f);
-function calcT(ini,fim,freq){let t=ini,n=0;const fa=fim<ini?fim+1440:fim;while(t<=fa){n++;t+=freq;}return n;}
-function getB(){return{name:document.getElementById('line-name').value||'Linha',desc:document.getElementById('line-desc').value||'',tI:parseInt(document.getElementById('t-ida').value)||25,tV:parseInt(document.getElementById('t-volta').value)||25,ini:document.getElementById('t-inicio').value||'21:00',fim:document.getElementById('t-fim').value||'01:40',vA:parseInt(document.getElementById('v-atual').value)||1};}
+const ff=f=>Number.isInteger(f)?String(f):f.toFixed(1);
+const r2=n=>Math.round(n*100)/100;
 
-function updateDerived(){
-  const b=getB();const c=b.tI+b.tV;
-  document.getElementById('t-ciclo').value=c;
-  const f=calcF(c,b.vA);
-  const ini=toMin(b.ini);const fim=toMin(b.fim);
+function getScenario(s){
+  return{
+    ida:parseInt(document.getElementById(s+'-ida').value)||15,
+    volta:parseInt(document.getElementById(s+'-volta').value)||15,
+    veh:parseInt(document.getElementById(s+'-veh').value)||1,
+    inicio:document.getElementById(s+'-inicio').value||'21:00',
+    fim:document.getElementById(s+'-fim').value||'01:30',
+    kmIda:parseFloat(document.getElementById(s+'-km-ida').value)||0,
+    kmVolta:parseFloat(document.getElementById(s+'-km-volta').value)||0,
+  };
+}
+
+function calcScenario(p){
+  const ciclo=p.ida+p.volta;
+  const freq=Math.round(ciclo/p.veh*10)/10;
+  const ini=toMin(p.inicio);const fim=toMin(p.fim);
   const fa=fim<ini?fim+1440:fim;
-  const trips=calcT(ini,fim,f);
-  const durH=Math.round((fa-ini)/60*10)/10;
-  document.getElementById('base-metrics').innerHTML=`
-    <div class="metric blue"><div class="metric-label">Ciclo total</div><div class="metric-val">${c} min</div></div>
-    <div class="metric"><div class="metric-label">Frequência actual</div><div class="metric-val">${ff(f)} min</div></div>
-    <div class="metric"><div class="metric-label">Viagens / dia</div><div class="metric-val">${trips}</div></div>
-    <div class="metric"><div class="metric-label">Duração serviço</div><div class="metric-val">${durH}h</div></div>`;
-  document.getElementById('base-note').textContent=`Ciclo de ${c} min com ${b.vA} viatura${b.vA>1?'s':''} → frequência de ${ff(f)} min.`;
+  let trips=0,t=ini;while(t<=fa){trips++;t+=freq;}
+  const kmViagem=p.kmIda+p.kmVolta;
+  const kmDia=r2(trips*kmViagem);
+  const kmDiaVeh=r2(kmDia/p.veh);
+  return{ciclo,freq,trips,kmViagem,kmDia,kmDiaVeh,ini,fim:toMin(p.fim),fa};
+}
+
+function buildRows(p,calc){
+  const rows=[];let t=calc.ini,vi=0;
+  while(t<=calc.fa){
+    const dep=t,arr=t+p.ida,ret=t+calc.ciclo;
+    const vl=LB[vi%p.veh];const vc=VS[vi%p.veh];
+    const isLast=t+calc.freq>calc.fa;
+    rows.push({dep:toStr(dep),arr:toStr(arr),ret:ret<=calc.fa+calc.freq?toStr(ret):'—',vl,vc,isLast});
+    vi++;t+=calc.freq;
+  }
+  return rows;
+}
+
+function renderMetrics(s,p,calc){
+  const el=document.getElementById(s+'-metrics');
+  el.innerHTML=`
+    <div class="metric"><div class="metric-label">Ciclo</div><div class="metric-val">${calc.ciclo} min</div></div>
+    <div class="metric"><div class="metric-label">Frequência</div><div class="metric-val">${ff(calc.freq)} min</div></div>
+    <div class="metric"><div class="metric-label">Viagens/dia</div><div class="metric-val">${calc.trips}</div></div>
+    <div class="metric"><div class="metric-label">Kms/dia</div><div class="metric-val">${calc.kmDia}</div></div>`;
+}
+
+function updateScenario(s){
+  const p=getScenario(s);
+  const ciclo=p.ida+p.volta;
+  document.getElementById(s+'-ciclo').value=ciclo;
+  const calc=calcScenario(p);
+  renderMetrics(s,p,calc);
+}
+
+function renderTbody(tbodyId,rows){
+  const tb=document.getElementById(tbodyId);tb.innerHTML='';
+  rows.forEach(r=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="font-family:var(--fm);font-weight:600">${r.dep}</td>
+      <td><span class="vbadge" style="background:${r.vc.bg};color:${r.vc.tc}">${r.vl}</span></td>
+      <td style="font-family:var(--fm)">${r.arr}</td>
+      <td style="font-family:var(--fm);color:${r.ret==='—'?'var(--ink3)':'var(--ink)'}">${r.ret}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+window._state={};
+
+function generateAll(){
+  const pA=getScenario('a');const pB=getScenario('b');
+  const cA=calcScenario(pA);const cB=calcScenario(pB);
+  const rA=buildRows(pA,cA);const rB=buildRows(pB,cB);
+  window._state={pA,pB,cA,cB,rA,rB};
+
+  renderTbody('tbody-a',rA);renderTbody('tbody-b',rB);
+  renderTbody('comp-tbody-a',rA);renderTbody('comp-tbody-b',rB);
+
+  const name=document.getElementById('line-name').value||'Linha';
+  document.getElementById('h-a-title').textContent=`${pA.veh} viatura${pA.veh>1?'s':''} · ${ff(cA.freq)} min · ${cA.trips} viagens`;
+  document.getElementById('h-b-title').textContent=`${pB.veh} viatura${pB.veh>1?'s':''} · ${ff(cB.freq)} min · ${cB.trips} viagens`;
+
+  const freqDelta=r2(cB.freq-cA.freq);
+  const tripDelta=cB.trips-cA.trips;
+  const kmDelta=r2(cB.kmDia-cA.kmDia);
+  const kmVDelta=r2(cB.kmViagem-cA.kmViagem);
+  const vehDelta=pB.veh-pA.veh;
+
+  function dClass(val,invertGood){
+    if(val===0)return'neutral';
+    const pos=val>0;
+    return(pos&&!invertGood)||(!pos&&invertGood)?'better':'worse';
+  }
+  function dSign(val){return val>0?'+':''}
+
+  document.getElementById('delta-grid').innerHTML=`
+    <div class="delta-card"><div class="delta-label">Frequência</div>
+      <div class="delta-val ${dClass(freqDelta,true)}">${dSign(freqDelta)}${ff(freqDelta)} min</div>
+      <div class="delta-sub">${ff(cA.freq)} → ${ff(cB.freq)} min</div></div>
+    <div class="delta-card"><div class="delta-label">Viaturas</div>
+      <div class="delta-val ${dClass(vehDelta,false)}">${dSign(vehDelta)}${vehDelta}</div>
+      <div class="delta-sub">${pA.veh} → ${pB.veh} viatura${pB.veh>1?'s':''}</div></div>
+    <div class="delta-card"><div class="delta-label">Viagens/dia</div>
+      <div class="delta-val ${dClass(tripDelta,false)}">${dSign(tripDelta)}${tripDelta}</div>
+      <div class="delta-sub">${cA.trips} → ${cB.trips} viagens</div></div>
+    <div class="delta-card"><div class="delta-label">Ciclo</div>
+      <div class="delta-val ${dClass(cB.ciclo-cA.ciclo,true)}">${dSign(cB.ciclo-cA.ciclo)}${cB.ciclo-cA.ciclo} min</div>
+      <div class="delta-sub">${cA.ciclo} → ${cB.ciclo} min</div></div>`;
+
+  document.getElementById('km-grid').innerHTML=`
+    <div class="delta-card"><div class="delta-label">Kms/viagem (ida+volta)</div>
+      <div class="delta-val ${dClass(kmVDelta,false)}">${dSign(kmVDelta)}${r2(kmVDelta)} km</div>
+      <div class="delta-sub">${r2(pA.kmIda+pA.kmVolta)} → ${r2(pB.kmIda+pB.kmVolta)} km</div></div>
+    <div class="delta-card"><div class="delta-label">Kms/dia total</div>
+      <div class="delta-val ${dClass(kmDelta,false)}">${dSign(kmDelta)}${r2(kmDelta)} km</div>
+      <div class="delta-sub">${cA.kmDia} → ${cB.kmDia} km</div></div>
+    <div class="delta-card"><div class="delta-label">Kms/dia por viatura (A)</div>
+      <div class="delta-val">${cA.kmDiaVeh} km</div>
+      <div class="delta-sub">${cA.trips} viagens × ${r2(pA.kmIda+pA.kmVolta)} km</div></div>
+    <div class="delta-card"><div class="delta-label">Kms/dia por viatura (B)</div>
+      <div class="delta-val">${cB.kmDiaVeh} km</div>
+      <div class="delta-sub">${Math.round(cB.trips/pB.veh)} viagens × ${r2(pB.kmIda+pB.kmVolta)} km</div></div>`;
+
+  switchTab('horarios');
 }
 
 function switchTab(id){
-  ['base','sim','sched'].forEach((t,i)=>{
+  ['config','horarios','comparacao'].forEach((t,i)=>{
     document.querySelectorAll('.tab')[i].classList.toggle('active',t===id);
     document.getElementById('tab-'+t).classList.toggle('active',t===id);
   });
 }
 
-function renderSim(){
-  const b=getB();const c=b.tI+b.tV;
-  const mode=document.getElementById('sim-mode').value;
-  const sI=document.getElementById('sim-inicio').value||b.ini;
-  document.getElementById('ctrl-veh').style.display=mode==='freq'?'none':'block';
-  document.getElementById('ctrl-freq').style.display=mode==='veh'?'none':'block';
-  const fA=calcF(c,b.vA);
-  const tA=calcT(toMin(b.ini),toMin(b.fim),fA);
-  let pV,pF,pFR;
-  if(mode==='veh'){pV=parseInt(document.getElementById('sim-veh').value)||2;pFR=calcF(c,pV);pF=pFR;}
-  else if(mode==='freq'){pF=parseInt(document.getElementById('sim-freq').value)||30;pV=calcV(c,pF);pFR=calcF(c,pV);}
-  else{pV=parseInt(document.getElementById('sim-veh').value)||2;pF=parseInt(document.getElementById('sim-freq').value)||30;pFR=calcF(c,pV);}
-  const pT=calcT(toMin(sI),toMin(b.fim),pFR);
-  const fd=pFR-fA;const vd=pV-b.vA;
-  const fdc=fd<0?'better':fd>0?'worse':'same';
-  const vdc=vd>0?'worse':vd<0?'better':'same';
-  document.getElementById('cur-sum').innerHTML=`
-    <div class="rline"><span class="rkey">Viaturas</span><span class="rval">${b.vA}</span></div>
-    <div class="rline"><span class="rkey">Ciclo</span><span class="rval">${c} min</span></div>
-    <div class="rline"><span class="rkey">Frequência</span><span class="rval">${ff(fA)} min</span></div>
-    <div class="rline"><span class="rkey">Início</span><span class="rval">${b.ini}</span></div>
-    <div class="rline"><span class="rkey">Fim</span><span class="rval">${b.fim}</span></div>
-    <div class="rline"><span class="rkey">Viagens/dia</span><span class="rval">${tA}</span></div>`;
-  document.getElementById('prop-sum').innerHTML=`
-    <div class="rline"><span class="rkey">Viaturas</span><span class="rval ${vdc}">${pV}${vd!==0?' ('+(vd>0?'+':'')+vd+')':''}</span></div>
-    <div class="rline"><span class="rkey">Ciclo</span><span class="rval">${c} min</span></div>
-    <div class="rline"><span class="rkey">Frequência real</span><span class="rval ${fdc}">${ff(pFR)} min${fd!==0?' ('+(fd>0?'+':'')+Math.round(fd*10)/10+')':''}</span></div>
-    <div class="rline"><span class="rkey">Início</span><span class="rval">${sI}</span></div>
-    <div class="rline"><span class="rkey">Fim</span><span class="rval">${b.fim}</span></div>
-    <div class="rline"><span class="rkey">Viagens/dia</span><span class="rval">${pT}</span></div>`;
-  const fmc=fd<0?'ok':fd>0?'warn':'';
-  document.getElementById('sim-metrics').innerHTML=`
-    <div class="metric ${fmc}"><div class="metric-label">Frequência proposta</div><div class="metric-val">${ff(pFR)} min</div><div class="metric-sub">${fd===0?'sem alteração':fd<0?'↑ melhoria de '+Math.abs(Math.round(fd*10)/10)+' min':'↓ degradação de '+Math.round(fd*10)/10+' min'}</div></div>
-    <div class="metric"><div class="metric-label">Viaturas</div><div class="metric-val">${pV}</div><div class="metric-sub">${vd===0?'sem alteração':vd>0?'+ '+vd+' viatura'+(vd>1?'s':''):'− '+Math.abs(vd)+' viatura'+(Math.abs(vd)>1?'s':'')}</div></div>
-    <div class="metric"><div class="metric-label">Viagens / dia</div><div class="metric-val">${pT}</div><div class="metric-sub">${pT-tA===0?'igual':(pT-tA>0?'+':'')+( pT-tA)+' face ao actual'}</div></div>
-    <div class="metric blue"><div class="metric-label">Início</div><div class="metric-val" style="font-size:17px">${sI}</div><div class="metric-sub">${sI!==b.ini?'alterado de '+b.ini:'igual ao actual'}</div></div>`;
-  const al=document.getElementById('sim-alert');
-  if(mode==='freq'&&pFR!==pF){al.style.display='block';al.className='alert alert-warn';al.textContent=`⚠ Com ${pV} viatura${pV>1?'s':''} e ciclo de ${c} min, a frequência real é ${ff(pFR)} min — não exactamente ${pF} min. Para ${pF} min exactos o ciclo teria de ser ${pV*pF} min.`;}
-  else if(mode==='both'&&pV*pF!==c){al.style.display='block';al.className='alert alert-info';al.textContent=`ℹ Para ${pV} viaturas com frequência exacta de ${pF} min, o ciclo necessário seria ${pV*pF} min (actual: ${c} min). Frequência real com o ciclo actual: ${ff(pFR)} min.`;}
-  else{al.style.display='none';}
-  window._sim={pV,pFR,sI,c,b,fimMin:toMin(b.fim)};
-}
-
-function renderSchedule(){
-  const st=window._sim;if(!st){renderSim();return;}
-  const{pV,pFR,sI,c,b}=st;
-  const fim=toMin(b.fim);const ini=toMin(sI);
-  const fa=fim<ini?fim+1440:fim;
-  const pT=calcT(ini,fim,pFR);
-  document.getElementById('sched-metrics').innerHTML=`
-    <div class="metric blue"><div class="metric-label">Linha</div><div class="metric-val" style="font-size:17px">${b.name}</div><div class="metric-sub">${b.desc}</div></div>
-    <div class="metric"><div class="metric-label">Viaturas</div><div class="metric-val">${pV}</div></div>
-    <div class="metric"><div class="metric-label">Frequência</div><div class="metric-val">${ff(pFR)} min</div></div>
-    <div class="metric"><div class="metric-label">Serviço</div><div class="metric-val" style="font-size:15px">${sI} – ${b.fim}</div><div class="metric-sub">${pT} viagens</div></div>`;
-  const leg=document.getElementById('sched-legend');
-  leg.innerHTML='';
-  for(let i=0;i<pV;i++){const s=VS[i%VS.length];leg.innerHTML+=`<span class="vbadge" style="background:${s.bg};color:${s.tc}">Viatura ${LB[i]}</span>`;}
-  const tbody=document.getElementById('sched-body');
-  tbody.innerHTML='';window._rows=[];
-  let t=ini,vi=0;
-  while(t<=fa){
-    const dep=t,arr=t+b.tI,ret=t+c;
-    const vl=LB[vi%pV];const vc=VS[vi%pV];
-    const isLast=t+pFR>fa;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600;font-family:var(--fm)">${toStr(dep)}</td>
-      <td><span class="vbadge" style="background:${vc.bg};color:${vc.tc}">Viat. ${vl}</span></td>
-      <td style="font-family:var(--fm)">${toStr(arr)}</td>
-      <td style="font-family:var(--fm)">${ret<=fa+pFR?toStr(ret):'—'}</td>
-      <td style="color:var(--ink3);font-size:12px">${isLast?'Último serviço':''}</td>`;
-    tbody.appendChild(tr);
-    window._rows.push({'Partida (origem)':toStr(dep),'Viatura':vl,'Chegada (destino)':toStr(arr),'Regresso (origem)':ret<=fa+pFR?toStr(ret):'—','Observações':isLast?'Último serviço':''});
-    vi++;t+=pFR;
-  }
-}
-
 function exportXLSX(){
-  if(!window._rows||!window._rows.length){alert('Gera primeiro o horário.');return;}
-  const st=window._sim;const b=st.b;
+  const st=window._state;
+  if(!st||!st.rA){alert('Gera primeiro os horários.');return;}
+  const{pA,pB,cA,cB,rA,rB}=st;
+  const name=document.getElementById('line-name').value||'Linha';
+  const desc=document.getElementById('line-desc').value||'';
   const wb=XLSX.utils.book_new();
-  const wsData=[
-    ['Linha',b.name,'','Percurso',b.desc],
-    ['Viaturas',st.pV,'','Frequência (min)',ff(st.pFR)],
-    ['Início',st.sI,'','Fim',b.fim],
-    ['Tempo ida (min)',b.tI,'','Tempo volta (min)',b.tV],
-    [],
-    Object.keys(window._rows[0]),
-    ...window._rows.map(r=>Object.values(r)),
-  ];
-  const ws=XLSX.utils.aoa_to_sheet(wsData);
-  ws['!cols']=[{wch:20},{wch:10},{wch:20},{wch:20},{wch:18}];
-  XLSX.utils.book_append_sheet(wb,ws,'Horário');
-  const ws2=XLSX.utils.aoa_to_sheet([['Parâmetro','Valor'],['Linha',b.name],['Percurso',b.desc],['Tempo ida (min)',b.tI],['Tempo volta (min)',b.tV],['Ciclo total (min)',b.tI+b.tV],['Viaturas propostas',st.pV],['Frequência real (min)',st.pFR],['Hora início',st.sI],['Hora fim',b.fim]]);
-  ws2['!cols']=[{wch:24},{wch:18}];
-  XLSX.utils.book_append_sheet(wb,ws2,'Parâmetros');
-  XLSX.writeFile(wb,`horario_${b.name.replace(/\s/g,'_')}.xlsx`);
-}
 
-function handleCSV(inp){
-  const file=inp.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const lines=e.target.result.trim().split('\n');
-    const msg=document.getElementById('csv-msg');
-    const rows=lines.slice(1).map(l=>l.split(/[,;]/)).filter(r=>r.length>=3);
-    if(!rows.length){msg.textContent='Sem dados válidos.';msg.style.color='var(--danger)';return;}
-    const t0=toMin(rows[0][0].trim());
-    const t1=rows.length>1?toMin(rows[1][0].trim()):t0+25;
-    const ida=rows[0][1]?toMin(rows[0][1].trim())-t0:null;
-    const volta=rows[0][2]?toMin(rows[0][2].trim())-toMin(rows[0][1].trim()):null;
-    if(ida&&ida>0)document.getElementById('t-ida').value=ida;
-    if(volta&&volta>0)document.getElementById('t-volta').value=volta;
-    document.getElementById('t-inicio').value=rows[0][0].trim();
-    document.getElementById('t-fim').value=rows[rows.length-1][0].trim();
-    updateDerived();
-    msg.innerHTML=`✓ ${rows.length} viagens importadas — frequência detectada: ${t1-t0} min.`;
-    msg.style.color='var(--ok)';
+  const mkSched=(rows,p,calc,label)=>{
+    const hdr=[['Linha',name,'Percurso',desc],['Cenário',label],[],
+      ['Tempo ida (min)',p.ida,'Tempo volta (min)',p.volta,'Ciclo (min)',calc.ciclo],
+      ['Viaturas',p.veh,'Frequência (min)',ff(calc.freq),'Viagens/dia',calc.trips],
+      ['Kms ida',p.kmIda,'Kms volta',p.kmVolta,'Kms/dia',calc.kmDia],[],
+      ['Partida','Viatura','Chegada destino','Regresso origem'],
+      ...rows.map(r=>[r.dep,r.vl,r.arr,r.ret])];
+    return hdr;
   };
-  reader.readAsText(file);
+
+  const wsA=XLSX.utils.aoa_to_sheet(mkSched(rA,pA,cA,'Cenário A — Actual'));
+  wsA['!cols']=[{wch:16},{wch:10},{wch:16},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,wsA,'Cenário A');
+
+  const wsB=XLSX.utils.aoa_to_sheet(mkSched(rB,pB,cB,'Cenário B — Proposto'));
+  wsB['!cols']=[{wch:16},{wch:10},{wch:16},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,wsB,'Cenário B');
+
+  const freqD=r2(cB.freq-cA.freq);const tripD=cB.trips-cA.trips;
+  const kmD=r2(cB.kmDia-cA.kmDia);const kmVD=r2((pB.kmIda+pB.kmVolta)-(pA.kmIda+pA.kmVolta));
+  const comp=[
+    ['Linha',name,'Percurso',desc],[],
+    ['Indicador','Cenário A','Cenário B','Delta','Sentido'],
+    ['Viaturas',pA.veh,pB.veh,pB.veh-pA.veh,pB.veh>pA.veh?'↑ Aumento':'↓ Redução'],
+    ['Ciclo (min)',cA.ciclo,cB.ciclo,cB.ciclo-cA.ciclo,''],
+    ['Frequência (min)',ff(cA.freq),ff(cB.freq),ff(freqD),freqD<0?'↑ Melhoria':freqD>0?'↓ Degradação':'Igual'],
+    ['Viagens/dia',cA.trips,cB.trips,tripD,tripD>0?'↑ Mais viagens':tripD<0?'↓ Menos viagens':'Igual'],
+    ['Kms/viagem',r2(pA.kmIda+pA.kmVolta),r2(pB.kmIda+pB.kmVolta),kmVD,''],
+    ['Kms/dia total',cA.kmDia,cB.kmDia,kmD,kmD>0?'↑ Mais kms':'↓ Menos kms'],
+    ['Kms/dia por viatura (A)',cA.kmDiaVeh,'','',''],
+    ['Kms/dia por viatura (B)','',cB.kmDiaVeh,'',''],
+  ];
+  const wsC=XLSX.utils.aoa_to_sheet(comp);
+  wsC['!cols']=[{wch:24},{wch:14},{wch:14},{wch:10},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,wsC,'Comparação');
+
+  XLSX.writeFile(wb,`comparacao_${name.replace(/\s/g,'_')}.xlsx`);
 }
 
-updateDerived();renderSim();
+updateScenario('a');updateScenario('b');
 </script>
