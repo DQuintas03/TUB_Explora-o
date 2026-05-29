@@ -16,11 +16,11 @@
   --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--r:8px;
 }
 body{font-family:var(--ff);color:var(--ink);background:var(--surface)}
-.topbar{background:var(--tub);padding:12px 20px;display:flex;align-items:center;gap:10px}
+.topbar{background:#005A8E;padding:12px 20px;display:flex;align-items:center;gap:10px}
 .topbar-logo-img{height:34px;width:auto;border-radius:6px;display:block}
 .topbar-sep{width:1px;height:16px;background:rgba(255,255,255,.25)}
 .topbar-title{font-size:13px;color:rgba(255,255,255,.85)}
-.tabs{background:var(--tub-dark);padding:0 20px;display:flex;gap:2px}
+.tabs{background:var(--tub);padding:0 20px;display:flex;gap:2px}
 .tab{padding:9px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;border:none;background:transparent;font-family:var(--ff);border-bottom:2px solid transparent;transition:all .15s}
 .tab.active{color:var(--white);border-bottom-color:var(--white)}
 .tab:hover:not(.active){color:rgba(255,255,255,.85)}
@@ -34,10 +34,13 @@ body{font-family:var(--ff);color:var(--ink);background:var(--surface)}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:12px;font-weight:500;color:var(--ink2)}
 input[type=text],input[type=number],input[type=time],select{font-family:var(--ff);font-size:13px;padding:6px 9px;border:0.5px solid var(--border);border-radius:6px;background:var(--white);color:var(--ink);outline:none;width:100%;transition:border .15s}
-input:focus,select:focus{border-color:var(--)}
-input[readonly]{background:var(---pale);color:var(---dark);font-weight:600}
+input:focus,select:focus{border-color:var(--tub)}
+input[readonly]{background:var(--tub-pale);color:var(--tub-dark);font-weight:600}
 .metric{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px}
-.metric.blue{background:var(--);border-color:var(--)}
+.metric.blue{background:var(--tub);border-color:var(--tub)}
+.metric.dark{background:#005A8E;border-color:#005A8E}
+.metric.dark .metric-label{color:rgba(255,255,255,.7)}
+.metric.dark .metric-val{color:var(--white)}
 .metric.ok{background:#F0FDF4;border-color:#86EFAC}
 .metric.warn{background:#FFFBEB;border-color:#FCD34D}
 .metric-label{font-size:10px;font-weight:500;color:var(--ink3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
@@ -50,15 +53,15 @@ input[readonly]{background:var(---pale);color:var(---dark);font-weight:600}
 .metric.blue .metric-sub{color:rgba(255,255,255,.6)}
 .btn{font-family:var(--ff);font-size:13px;font-weight:500;padding:7px 16px;border-radius:6px;cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--ink);transition:all .15s}
 .btn:hover{background:var(--surface)}
-.btn-primary{background:var(--);color:var(--white);border-color:var(--)}
-.btn-primary:hover{background:var(---dark)}
+.btn-primary{background:var(--tub);color:var(--white);border-color:var(--tub)}
+.btn-primary:hover{background:var(--tub-dark)}
 .btn-danger{background:#FEF2F2;color:var(--danger);border-color:#FCA5A5}
 .btn-sm{padding:4px 10px;font-size:12px}
 table{width:100%;border-collapse:collapse;font-size:12px}
-thead tr{border-bottom:1.5px solid var(--)}
-thead th{padding:6px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--);background:var(---pale)}
+thead tr{border-bottom:1.5px solid var(--tub)}
+thead th{padding:6px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--tub);background:var(--tub-pale)}
 tbody tr{border-bottom:0.5px solid var(--border2)}
-tbody tr:hover{background:var(---pale)}
+tbody tr:hover{background:var(--tub-pale)}
 tbody tr.desdobramento{background:#FFFBEB}
 tbody tr.desdobramento:hover{background:#FEF3C7}
 td{padding:6px 8px;color:var(--ink)}
@@ -67,10 +70,10 @@ td{padding:6px 8px;color:var(--ink)}
 .scenario-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
 .scenario{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px}
 .scenario.a{border-top:3px solid var(--ink3)}
-.scenario.b{border-top:3px solid var(--)}
+.scenario.b{border-top:3px solid var(--tub)}
 .scenario-title{font-size:12px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .badge-a{background:var(--surface);color:var(--ink2);font-size:11px;padding:2px 7px;border-radius:4px}
-.badge-b{background:var(---pale);color:var(---dark);font-size:11px;padding:2px 7px;border-radius:4px}
+.badge-b{background:var(--tub-pale);color:var(--tub-dark);font-size:11px;padding:2px 7px;border-radius:4px}
 .comp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .delta-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
 .delta-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px}
@@ -78,19 +81,10 @@ td{padding:6px 8px;color:var(--ink)}
 .delta-val{font-size:15px;font-weight:600;font-family:var(--fm)}
 .delta-sub{font-size:10px;color:var(--ink3);margin-top:1px}
 .better{color:var(--ok)}.worse{color:var(--danger)}.same{color:var(--ink3)}
-.fiab-card{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--r);margin-top:10px;border:1px solid}
-.fiab-card.up{background:#F0FDF4;border-color:#86EFAC}
-.fiab-card.down{background:#FEF2F2;border-color:#FCA5A5}
-.fiab-card.flat{background:var(--surface);border-color:var(--border)}
-.fiab-icon{font-size:22px;font-weight:700;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.fiab-card.up .fiab-icon{background:#DCFCE7;color:#16A34A}
-.fiab-card.down .fiab-icon{background:#FEE2E2;color:#DC2626}
-.fiab-card.flat .fiab-icon{background:var(--border2);color:var(--ink3)}
-.fiab-title{font-size:13px;font-weight:600;margin-bottom:2px}
-.fiab-card.up .fiab-title{color:#15803D}
-.fiab-card.down .fiab-title{color:#B91C1C}
-.fiab-card.flat .fiab-title{color:var(--ink2)}
-.fiab-sub{font-size:11px;color:var(--ink2);line-height:1.4}
+.fiab-note{font-size:10px;font-weight:600;margin-top:6px;padding:3px 7px;border-radius:4px;display:inline-block;line-height:1.3}
+.fiab-note.up{background:#DCFCE7;color:#15803D}
+.fiab-note.down{background:#FEE2E2;color:#B91C1C}
+.fiab-note.flat{background:var(--border2);color:var(--ink3)}
 #map{height:240px;border-radius:var(--r);border:0.5px solid var(--border);margin-bottom:10px}
 .map-legend{display:flex;gap:10px;margin-bottom:8px;font-size:12px;align-items:center;flex-wrap:wrap}
 .map-legend-item{display:flex;align-items:center;gap:4px}
@@ -98,7 +92,7 @@ td{padding:6px 8px;color:var(--ink)}
 .vc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
 .vc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--surface);border-radius:6px;font-size:12px}
 .vc-label{color:var(--ink2);font-weight:500}
-.vc-val{font-family:var(--fm);font-weight:600;color:var(---dark)}
+.vc-val{font-family:var(--fm);font-weight:600;color:var(--tub-dark)}
 .db-form{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:12px;margin-top:10px}
 .db-form-title{font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:10px}
 .status-msg{font-size:11px;margin-top:6px}
@@ -107,7 +101,7 @@ td{padding:6px 8px;color:var(--ink)}
 <body>
 
 <div class="topbar">
-  <img src="IMG/tub.jpg" alt="TUB" class="topbar-logo-img">
+  <img src="IMG/logo_TUB.jpg" alt="TUB" class="topbar-logo-img">
   <div class="topbar-sep"></div>
   <span class="topbar-title">Otimizador de Frota e Horários</span>
 </div>
@@ -222,7 +216,6 @@ td{padding:6px 8px;color:var(--ink)}
     <div style="border-top:0.5px solid var(--border2);padding-top:10px;margin-top:4px">
       <div class="card-title">Quilómetros e velocidade comercial</div>
       <div class="delta-grid" id="km-grid"></div>
-      <div class="fiab-card" id="fiab-card" style="display:none"></div>
     </div>
   </div>
   <div class="comp-wrap" style="margin-bottom:12px">
@@ -368,8 +361,9 @@ function updateS(s){
   document.getElementById(s+'-ciclo').value=c;
   const calc=calcScen(p);
   updateVC(s,p);
+  const firstClass=s==='a'?'metric dark':'metric blue';
   document.getElementById(s+'-metrics').innerHTML=`
-    <div class="metric blue"><div class="metric-label">Ciclo</div><div class="metric-val">${c} min</div></div>
+    <div class="${firstClass}"><div class="metric-label">Ciclo</div><div class="metric-val">${c} min</div></div>
     <div class="metric"><div class="metric-label">Frequência</div><div class="metric-val">${ff(calc.freq)} min</div></div>
     <div class="metric"><div class="metric-label">Viagens/dia</div><div class="metric-val">${calc.trips}</div></div>
     <div class="metric"><div class="metric-label">Kms/dia</div><div class="metric-val">${calc.kmDia}</div></div>`;
@@ -465,33 +459,23 @@ function generateAll(){
     <div class="delta-card"><div class="delta-label">Viagens/dia</div><div class="delta-val ${dc(-td)}">${ds(td)}${td}</div><div class="delta-sub">${cA.trips} → ${cB.trips}</div></div>
     <div class="delta-card"><div class="delta-label">Ciclo</div><div class="delta-val ${dc(cB.ciclo-cA.ciclo)}">${ds(cB.ciclo-cA.ciclo)}${cB.ciclo-cA.ciclo} min</div><div class="delta-sub">${cA.ciclo} → ${cB.ciclo} min</div></div>`;
 
+  // Apontamento de fiabilidade — VC mais baixa em B = mais folga = mais fiabilidade
+  let fiabNote='';
+  if(vcA_m&&vcB_m&&vcA_m!==vcB_m){
+    if(vcB_m<vcA_m){
+      fiabNote=`<div class="fiab-note up">↑ Aumento da fiabilidade</div>`;
+    } else {
+      fiabNote=`<div class="fiab-note down">↓ Diminuição da fiabilidade</div>`;
+    }
+  } else if(vcA_m&&vcB_m){
+    fiabNote=`<div class="fiab-note flat">= Fiabilidade mantida</div>`;
+  }
+
   document.getElementById('km-grid').innerHTML=`
     <div class="delta-card"><div class="delta-label">Kms/viagem</div><div class="delta-val ${dc(-kmVd)}">${ds(kmVd)}${kmVd} km</div><div class="delta-sub">${r2(pA.kmI+pA.kmV)} → ${r2(pB.kmI+pB.kmV)} km</div></div>
     <div class="delta-card"><div class="delta-label">Kms/dia total</div><div class="delta-val ${dc(-kmDd)}">${ds(kmDd)}${kmDd} km</div><div class="delta-sub">${cA.kmDia} → ${cB.kmDia} km</div></div>
     <div class="delta-card"><div class="delta-label">VC ida (A→B)</div><div class="delta-val">${vcA_i||'—'} → ${vcB_i||'—'}</div><div class="delta-sub">km/h</div></div>
-    <div class="delta-card"><div class="delta-label">VC média (A→B)</div><div class="delta-val">${vcA_m||'—'} → ${vcB_m||'—'}</div><div class="delta-sub">km/h</div></div>`;
-
-  // Indicador de fiabilidade — VC mais baixa em B significa mais folga no horário => mais fiabilidade
-  const fiabEl=document.getElementById('fiab-card');
-  if(vcA_m&&vcB_m&&vcA_m!==vcB_m){
-    if(vcB_m<vcA_m){
-      const ganho=r2(vcA_m-vcB_m);
-      fiabEl.className='fiab-card up';
-      fiabEl.innerHTML=`<div class="fiab-icon">↑</div><div><div class="fiab-title">Aumento da fiabilidade</div><div class="fiab-sub">A velocidade comercial baixa ${ganho} km/h — mais folga no horário reduz o risco de atrasos acumulados.</div></div>`;
-      fiabEl.style.display='flex';
-    } else {
-      const perda=r2(vcB_m-vcA_m);
-      fiabEl.className='fiab-card down';
-      fiabEl.innerHTML=`<div class="fiab-icon">↓</div><div><div class="fiab-title">Diminuição da fiabilidade</div><div class="fiab-sub">A velocidade comercial sobe ${perda} km/h — horário mais apertado aumenta o risco de atrasos.</div></div>`;
-      fiabEl.style.display='flex';
-    }
-  } else if(vcA_m&&vcB_m&&vcA_m===vcB_m){
-    fiabEl.className='fiab-card flat';
-    fiabEl.innerHTML=`<div class="fiab-icon">=</div><div><div class="fiab-title">Fiabilidade mantida</div><div class="fiab-sub">A velocidade comercial média não se altera entre os cenários.</div></div>`;
-    fiabEl.style.display='flex';
-  } else {
-    fiabEl.style.display='none';
-  }
+    <div class="delta-card"><div class="delta-label">VC média (A→B)</div><div class="delta-val">${vcA_m||'—'} → ${vcB_m||'—'}</div><div class="delta-sub">km/h</div>${fiabNote}</div>`;
 
   switchTab('horarios');
 }
