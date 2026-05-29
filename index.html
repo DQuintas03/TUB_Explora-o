@@ -34,10 +34,10 @@ body{font-family:var(--ff);color:var(--ink);background:var(--surface)}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:12px;font-weight:500;color:var(--ink2)}
 input[type=text],input[type=number],input[type=time],select{font-family:var(--ff);font-size:13px;padding:6px 9px;border:0.5px solid var(--border);border-radius:6px;background:var(--white);color:var(--ink);outline:none;width:100%;transition:border .15s}
-input:focus,select:focus{border-color:var(--tub)}
-input[readonly]{background:var(--tub-pale);color:var(--tub-dark);font-weight:600}
+input:focus,select:focus{border-color:var(--)}
+input[readonly]{background:var(---pale);color:var(---dark);font-weight:600}
 .metric{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px}
-.metric.blue{background:var(--tub);border-color:var(--tub)}
+.metric.blue{background:var(--);border-color:var(--)}
 .metric.ok{background:#F0FDF4;border-color:#86EFAC}
 .metric.warn{background:#FFFBEB;border-color:#FCD34D}
 .metric-label{font-size:10px;font-weight:500;color:var(--ink3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
@@ -50,15 +50,15 @@ input[readonly]{background:var(--tub-pale);color:var(--tub-dark);font-weight:600
 .metric.blue .metric-sub{color:rgba(255,255,255,.6)}
 .btn{font-family:var(--ff);font-size:13px;font-weight:500;padding:7px 16px;border-radius:6px;cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--ink);transition:all .15s}
 .btn:hover{background:var(--surface)}
-.btn-primary{background:var(--tub);color:var(--white);border-color:var(--tub)}
-.btn-primary:hover{background:var(--tub-dark)}
+.btn-primary{background:var(--);color:var(--white);border-color:var(--)}
+.btn-primary:hover{background:var(---dark)}
 .btn-danger{background:#FEF2F2;color:var(--danger);border-color:#FCA5A5}
 .btn-sm{padding:4px 10px;font-size:12px}
 table{width:100%;border-collapse:collapse;font-size:12px}
-thead tr{border-bottom:1.5px solid var(--tub)}
-thead th{padding:6px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--tub);background:var(--tub-pale)}
+thead tr{border-bottom:1.5px solid var(--)}
+thead th{padding:6px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--);background:var(---pale)}
 tbody tr{border-bottom:0.5px solid var(--border2)}
-tbody tr:hover{background:var(--tub-pale)}
+tbody tr:hover{background:var(---pale)}
 tbody tr.desdobramento{background:#FFFBEB}
 tbody tr.desdobramento:hover{background:#FEF3C7}
 td{padding:6px 8px;color:var(--ink)}
@@ -67,10 +67,10 @@ td{padding:6px 8px;color:var(--ink)}
 .scenario-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
 .scenario{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px}
 .scenario.a{border-top:3px solid var(--ink3)}
-.scenario.b{border-top:3px solid var(--tub)}
+.scenario.b{border-top:3px solid var(--)}
 .scenario-title{font-size:12px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .badge-a{background:var(--surface);color:var(--ink2);font-size:11px;padding:2px 7px;border-radius:4px}
-.badge-b{background:var(--tub-pale);color:var(--tub-dark);font-size:11px;padding:2px 7px;border-radius:4px}
+.badge-b{background:var(---pale);color:var(---dark);font-size:11px;padding:2px 7px;border-radius:4px}
 .comp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .delta-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
 .delta-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px}
@@ -98,7 +98,7 @@ td{padding:6px 8px;color:var(--ink)}
 .vc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
 .vc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--surface);border-radius:6px;font-size:12px}
 .vc-label{color:var(--ink2);font-weight:500}
-.vc-val{font-family:var(--fm);font-weight:600;color:var(--tub-dark)}
+.vc-val{font-family:var(--fm);font-weight:600;color:var(---dark)}
 .db-form{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:12px;margin-top:10px}
 .db-form-title{font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:10px}
 .status-msg{font-size:11px;margin-top:6px}
@@ -107,7 +107,7 @@ td{padding:6px 8px;color:var(--ink)}
 <body>
 
 <div class="topbar">
-  <img src="IMG/tub" alt="TUB" class="topbar-logo-img">
+  <img src="IMG/tub.jpg" alt="TUB" class="topbar-logo-img">
   <div class="topbar-sep"></div>
   <span class="topbar-title">Otimizador de Frota e Horários</span>
 </div>
