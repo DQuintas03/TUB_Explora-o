@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TUB · Optimizador de Frota e Horários</title>
+<title>TUB · Otimizador de Frota e Horários</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
@@ -17,7 +17,7 @@
 }
 body{font-family:var(--ff);color:var(--ink);background:var(--surface)}
 .topbar{background:var(--tub);padding:12px 20px;display:flex;align-items:center;gap:10px}
-.topbar-logo{font-family:var(--fm);font-size:15px;font-weight:500;color:var(--white);background:rgba(255,255,255,.15);padding:4px 9px;border-radius:5px}
+.topbar-logo-img{height:34px;width:auto;border-radius:6px;display:block}
 .topbar-sep{width:1px;height:16px;background:rgba(255,255,255,.25)}
 .topbar-title{font-size:13px;color:rgba(255,255,255,.85)}
 .tabs{background:var(--tub-dark);padding:0 20px;display:flex;gap:2px}
@@ -78,6 +78,19 @@ td{padding:6px 8px;color:var(--ink)}
 .delta-val{font-size:15px;font-weight:600;font-family:var(--fm)}
 .delta-sub{font-size:10px;color:var(--ink3);margin-top:1px}
 .better{color:var(--ok)}.worse{color:var(--danger)}.same{color:var(--ink3)}
+.fiab-card{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--r);margin-top:10px;border:1px solid}
+.fiab-card.up{background:#F0FDF4;border-color:#86EFAC}
+.fiab-card.down{background:#FEF2F2;border-color:#FCA5A5}
+.fiab-card.flat{background:var(--surface);border-color:var(--border)}
+.fiab-icon{font-size:22px;font-weight:700;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fiab-card.up .fiab-icon{background:#DCFCE7;color:#16A34A}
+.fiab-card.down .fiab-icon{background:#FEE2E2;color:#DC2626}
+.fiab-card.flat .fiab-icon{background:var(--border2);color:var(--ink3)}
+.fiab-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.fiab-card.up .fiab-title{color:#15803D}
+.fiab-card.down .fiab-title{color:#B91C1C}
+.fiab-card.flat .fiab-title{color:var(--ink2)}
+.fiab-sub{font-size:11px;color:var(--ink2);line-height:1.4}
 #map{height:240px;border-radius:var(--r);border:0.5px solid var(--border);margin-bottom:10px}
 .map-legend{display:flex;gap:10px;margin-bottom:8px;font-size:12px;align-items:center;flex-wrap:wrap}
 .map-legend-item{display:flex;align-items:center;gap:4px}
@@ -94,9 +107,9 @@ td{padding:6px 8px;color:var(--ink)}
 <body>
 
 <div class="topbar">
-  <span class="topbar-logo">TUB</span>
+  <img src="IMG/logo_TUB.jpg" alt="TUB" class="topbar-logo-img">
   <div class="topbar-sep"></div>
-  <span class="topbar-title">Optimizador de Frota e Horários</span>
+  <span class="topbar-title">Otimizador de Frota e Horários</span>
 </div>
 <div class="tabs">
   <button class="tab active" onclick="switchTab('config')">Configuração</button>
@@ -107,12 +120,12 @@ td{padding:6px 8px;color:var(--ink)}
 
 <div id="tab-config" class="panel active">
   <div class="card">
-    <div class="card-title">Selecção da linha</div>
+    <div class="card-title">Seleção da linha</div>
     <div class="grid2" style="margin-bottom:10px">
       <div class="field">
         <label>Linha</label>
         <select id="linha-sel" onchange="onLinhaSelect()">
-          <option value="">— selecciona uma linha —</option>
+          <option value="">— seleciona uma linha —</option>
         </select>
       </div>
       <div class="field">
@@ -130,7 +143,7 @@ td{padding:6px 8px;color:var(--ink)}
 
   <div class="scenario-wrap">
     <div class="scenario a">
-      <div class="scenario-title"><span class="badge-a">Cenário A</span> Actual</div>
+      <div class="scenario-title"><span class="badge-a">Cenário A</span> Atual</div>
       <div class="grid3" style="margin-bottom:8px">
         <div class="field"><label>Tempo ida (min)</label><input type="number" id="a-ida" value="15" min="1" oninput="updateS('a')"></div>
         <div class="field"><label>Tempo volta (min)</label><input type="number" id="a-volta" value="15" min="1" oninput="updateS('a')"></div>
@@ -209,6 +222,7 @@ td{padding:6px 8px;color:var(--ink)}
     <div style="border-top:0.5px solid var(--border2);padding-top:10px;margin-top:4px">
       <div class="card-title">Quilómetros e velocidade comercial</div>
       <div class="delta-grid" id="km-grid"></div>
+      <div class="fiab-card" id="fiab-card" style="display:none"></div>
     </div>
   </div>
   <div class="comp-wrap" style="margin-bottom:12px">
@@ -233,7 +247,7 @@ td{padding:6px 8px;color:var(--ink)}
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <script>
 // ===== CAMINHO DO GEOJSON =====
 // O ficheiro está em: TUB_Explora-o/Linhas/linhas.geojson
@@ -457,6 +471,28 @@ function generateAll(){
     <div class="delta-card"><div class="delta-label">VC ida (A→B)</div><div class="delta-val">${vcA_i||'—'} → ${vcB_i||'—'}</div><div class="delta-sub">km/h</div></div>
     <div class="delta-card"><div class="delta-label">VC média (A→B)</div><div class="delta-val">${vcA_m||'—'} → ${vcB_m||'—'}</div><div class="delta-sub">km/h</div></div>`;
 
+  // Indicador de fiabilidade — VC mais baixa em B significa mais folga no horário => mais fiabilidade
+  const fiabEl=document.getElementById('fiab-card');
+  if(vcA_m&&vcB_m&&vcA_m!==vcB_m){
+    if(vcB_m<vcA_m){
+      const ganho=r2(vcA_m-vcB_m);
+      fiabEl.className='fiab-card up';
+      fiabEl.innerHTML=`<div class="fiab-icon">↑</div><div><div class="fiab-title">Aumento da fiabilidade</div><div class="fiab-sub">A velocidade comercial baixa ${ganho} km/h — mais folga no horário reduz o risco de atrasos acumulados.</div></div>`;
+      fiabEl.style.display='flex';
+    } else {
+      const perda=r2(vcB_m-vcA_m);
+      fiabEl.className='fiab-card down';
+      fiabEl.innerHTML=`<div class="fiab-icon">↓</div><div><div class="fiab-title">Diminuição da fiabilidade</div><div class="fiab-sub">A velocidade comercial sobe ${perda} km/h — horário mais apertado aumenta o risco de atrasos.</div></div>`;
+      fiabEl.style.display='flex';
+    }
+  } else if(vcA_m&&vcB_m&&vcA_m===vcB_m){
+    fiabEl.className='fiab-card flat';
+    fiabEl.innerHTML=`<div class="fiab-icon">=</div><div><div class="fiab-title">Fiabilidade mantida</div><div class="fiab-sub">A velocidade comercial média não se altera entre os cenários.</div></div>`;
+    fiabEl.style.display='flex';
+  } else {
+    fiabEl.style.display='none';
+  }
+
   switchTab('horarios');
 }
 
@@ -476,7 +512,55 @@ function exportXLSX(){
   const wb=XLSX.utils.book_new();
   const vcAi=calcVC(pA.kmI,pA.ida);const vcBi=calcVC(pB.kmI,pB.ida);
   const vcAm=calcVC(r2(pA.kmI+pA.kmV),pA.ida+pA.volta);const vcBm=calcVC(r2(pB.kmI+pB.kmV),pB.ida+pB.volta);
+  const fd=r2(cB.freq-cA.freq);const vd=pB.veh-pA.veh;
 
+  // Veredicto de fiabilidade
+  let fiabTxt='Sem dados suficientes';
+  if(vcAm&&vcBm){
+    if(vcBm<vcAm) fiabTxt='Aumento da fiabilidade (VC baixa '+r2(vcAm-vcBm)+' km/h)';
+    else if(vcBm>vcAm) fiabTxt='Diminuição da fiabilidade (VC sobe '+r2(vcBm-vcAm)+' km/h)';
+    else fiabTxt='Fiabilidade mantida';
+  }
+
+  // Estilos reutilizáveis
+  const stHeader={fill:{fgColor:{rgb:'009FD4'}},font:{color:{rgb:'FFFFFF'},bold:true,sz:11},alignment:{horizontal:'left',vertical:'center'}};
+  const stTitle={font:{bold:true,sz:14,color:{rgb:'1C2B36'}}};
+  const stSub={font:{italic:true,sz:10,color:{rgb:'8FA8B8'}}};
+  const stLabel={font:{bold:true,color:{rgb:'4A6070'}},fill:{fgColor:{rgb:'EDF7FC'}}};
+  const stGreen={font:{bold:true,color:{rgb:'15803D'}},fill:{fgColor:{rgb:'F0FDF4'}}};
+  const stRed={font:{bold:true,color:{rgb:'B91C1C'}},fill:{fgColor:{rgb:'FEF2F2'}}};
+
+  function applyStyle(ws,cell,style){if(ws[cell])ws[cell].s=style;}
+
+  // ---- FOLHA RESUMO ----
+  const resumo=[
+    ['Otimizador de Frota e Horários — TUB'],
+    ['Linha '+linha+(desc?' · '+desc:'')],
+    [],
+    ['Indicador','Cenário A (atual)','Cenário B (proposto)','Variação'],
+    ['Viaturas',pA.veh,pB.veh,(vd>0?'+':'')+vd],
+    ['Ciclo (min)',cA.ciclo,cB.ciclo,(cB.ciclo-cA.ciclo>0?'+':'')+(cB.ciclo-cA.ciclo)],
+    ['Frequência (min)',ff(cA.freq),ff(cB.freq),(fd>0?'+':'')+ff(fd)],
+    ['Viagens/dia',cA.trips,cB.trips,(cB.trips-cA.trips>0?'+':'')+(cB.trips-cA.trips)],
+    ['Kms/viagem',r2(pA.kmI+pA.kmV),r2(pB.kmI+pB.kmV),''],
+    ['Kms/dia total',cA.kmDia,cB.kmDia,(cB.kmDia-cA.kmDia>0?'+':'')+r2(cB.kmDia-cA.kmDia)],
+    ['VC média (km/h)',vcAm||'—',vcBm||'—',''],
+    [],
+    ['Veredicto de fiabilidade',fiabTxt],
+    [],
+    ['Desdobramentos (cenário B)',dbs.length],
+  ];
+  const wsR=XLSX.utils.aoa_to_sheet(resumo);
+  wsR['!cols']=[{wch:26},{wch:20},{wch:22},{wch:14}];
+  wsR['!merges']=[{s:{r:0,c:0},e:{r:0,c:3}},{s:{r:1,c:0},e:{r:1,c:3}},{s:{r:12,c:1},e:{r:12,c:3}}];
+  applyStyle(wsR,'A1',stTitle);applyStyle(wsR,'A2',stSub);
+  ['A4','B4','C4','D4'].forEach(c=>applyStyle(wsR,c,stHeader));
+  ['A5','A6','A7','A8','A9','A10','A11','A15'].forEach(c=>applyStyle(wsR,c,stLabel));
+  applyStyle(wsR,'A13',stLabel);
+  applyStyle(wsR,'B13', (vcAm&&vcBm&&vcBm<vcAm)?stGreen : (vcAm&&vcBm&&vcBm>vcAm)?stRed : stLabel);
+  XLSX.utils.book_append_sheet(wb,wsR,'Resumo');
+
+  // ---- FOLHAS DE HORÁRIO ----
   const mkSheet=(rows,p,calc,label)=>[
     ['Linha',linha,'Percurso',desc],['Cenário',label],[],
     ['Tempo ida (min)',p.ida,'Tempo volta (min)',p.volta,'Ciclo (min)',calc.ciclo],
@@ -487,15 +571,19 @@ function exportXLSX(){
     ...rows.map(r=>[r.dep,r.vl,r.arr,r.ret,r.tipo==='desdobramento'?'Desdobramento: '+(r.desc||''):r.isLast?'Último serviço':'Normal'])
   ];
 
-  const wsA=XLSX.utils.aoa_to_sheet(mkSheet(rA,pA,cA,'Cenário A — Actual'));
+  const wsA=XLSX.utils.aoa_to_sheet(mkSheet(rA,pA,cA,'Cenário A — Atual'));
   wsA['!cols']=[{wch:16},{wch:8},{wch:16},{wch:16},{wch:24}];
+  ['A9','B9','C9','D9','E9'].forEach(c=>applyStyle(wsA,c,stHeader));
+  applyStyle(wsA,'A1',stLabel);applyStyle(wsA,'A2',stLabel);
   XLSX.utils.book_append_sheet(wb,wsA,'Cenário A');
 
   const wsB=XLSX.utils.aoa_to_sheet(mkSheet(rB,pB,cB,'Cenário B — Proposto'));
   wsB['!cols']=[{wch:16},{wch:8},{wch:16},{wch:16},{wch:30}];
+  ['A9','B9','C9','D9','E9'].forEach(c=>applyStyle(wsB,c,stHeader));
+  applyStyle(wsB,'A1',stLabel);applyStyle(wsB,'A2',stLabel);
   XLSX.utils.book_append_sheet(wb,wsB,'Cenário B');
 
-  const fd=r2(cB.freq-cA.freq);const vd=pB.veh-pA.veh;
+  // ---- FOLHA COMPARAÇÃO ----
   const comp=[
     ['Linha',linha,'Percurso',desc],[],
     ['Indicador','Cenário A','Cenário B','Delta','Sentido'],
@@ -507,12 +595,16 @@ function exportXLSX(){
     ['Kms/dia total',cA.kmDia,cB.kmDia,r2(cB.kmDia-cA.kmDia),''],
     ['VC ida (km/h)',vcAi||'',vcBi||'',vcAi&&vcBi?r2(vcBi-vcAi):'',''],
     ['VC média (km/h)',vcAm||'',vcBm||'',vcAm&&vcBm?r2(vcBm-vcAm):'',''],
+    ['Fiabilidade','','','',fiabTxt],
     [],['Desdobramentos no cenário B: '+dbs.length],
     ...dbs.map(d=>['',d.dep,d.desc,d.km+' km',''])
   ];
   const wsC=XLSX.utils.aoa_to_sheet(comp);
-  wsC['!cols']=[{wch:22},{wch:14},{wch:14},{wch:10},{wch:18}];
+  wsC['!cols']=[{wch:22},{wch:14},{wch:14},{wch:10},{wch:24}];
+  ['A3','B3','C3','D3','E3'].forEach(c=>applyStyle(wsC,c,stHeader));
+  applyStyle(wsC,'A1',stLabel);
   XLSX.utils.book_append_sheet(wb,wsC,'Comparação');
+
   XLSX.writeFile(wb,'horario_'+linha+'.xlsx');
 }
 
