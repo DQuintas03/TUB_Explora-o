@@ -512,7 +512,7 @@ function exportXLSX(){
   const stSub={font:{italic:true,sz:10,color:{rgb:'8FA8B8'}}};
   const stLabel={font:{bold:true,color:{rgb:'4A6070'}},fill:{fgColor:{rgb:'EDF7FC'}}};
   const stGreen={font:{bold:true,color:{rgb:'15803D'}},fill:{fgColor:{rgb:'F0FDF4'}}};
-  const stRed={font:{bold:true,color:{rgb:'B91C1C'}},fill:{fgColor:{rgb:'FEF2F2'}}};
+  const stRed={font:{bold:true,color:{rgb:'FF0000'}},fill:{fgColor:{rgb:'FFC5C5'}}};
 
   function applyStyle(ws,cell,style){if(ws[cell])ws[cell].s=style;}
 
@@ -528,7 +528,7 @@ function exportXLSX(){
     ['Viagens/dia',cA.trips,cB.trips,(cB.trips-cA.trips>0?'+':'')+(cB.trips-cA.trips)],
     ['Kms/viagem',r2(pA.kmI+pA.kmV),r2(pB.kmI+pB.kmV),''],
     ['Kms/dia total',cA.kmDia,cB.kmDia,(cB.kmDia-cA.kmDia>0?'+':'')+r2(cB.kmDia-cA.kmDia)],
-    ['VC média (km/h)',vcAm||'—',vcBm||'—',''],
+    ['VC média (km/h)',vcAm||'—',vcBm||'—',(vcAm&&vcBm)?((vcBm-vcAm>0?'+':'')+r2(vcBm-vcAm)):''],
     [],
     ['Veredicto de fiabilidade',fiabTxt],
     [],
@@ -541,6 +541,18 @@ function exportXLSX(){
   ['A4','B4','C4','D4'].forEach(c=>applyStyle(wsR,c,stHeader));
   ['A5','A6','A7','A8','A9','A10','A11','A15'].forEach(c=>applyStyle(wsR,c,stLabel));
   applyStyle(wsR,'A13',stLabel);
+  // Coloração condicional da coluna Variação (D). lowerBetter: descer é favorável; higherBetter: subir é favorável; null: neutro
+  const colorDelta=(ws,cell,delta,dir)=>{
+    if(delta===0||dir===null){applyStyle(ws,cell,stLabel);return;}
+    const favoravel = dir==='lower' ? delta<0 : delta>0;
+    applyStyle(ws,cell, favoravel?stGreen:stRed);
+  };
+  colorDelta(wsR,'D5',vd,null);                       // Viaturas — neutro (custo da decisão)
+  colorDelta(wsR,'D6',cB.ciclo-cA.ciclo,null);        // Ciclo — neutro
+  colorDelta(wsR,'D7',fd,'lower');                    // Frequência — descer é melhor
+  colorDelta(wsR,'D8',cB.trips-cA.trips,'higher');    // Viagens/dia — subir é melhor
+  colorDelta(wsR,'D10',r2(cB.kmDia-cA.kmDia),null);   // Kms/dia — neutro
+  if(vcAm&&vcBm) colorDelta(wsR,'D11',r2(vcBm-vcAm),'lower'); // VC média — descer é melhor
   applyStyle(wsR,'B13', (vcAm&&vcBm&&vcBm<vcAm)?stGreen : (vcAm&&vcBm&&vcBm>vcAm)?stRed : stLabel);
   XLSX.utils.book_append_sheet(wb,wsR,'Resumo');
 
@@ -587,6 +599,16 @@ function exportXLSX(){
   wsC['!cols']=[{wch:22},{wch:14},{wch:14},{wch:10},{wch:24}];
   ['A3','B3','C3','D3','E3'].forEach(c=>applyStyle(wsC,c,stHeader));
   applyStyle(wsC,'A1',stLabel);
+  // Coloração condicional da coluna Delta (D)
+  colorDelta(wsC,'D4',vd,null);                          // Viaturas — neutro
+  colorDelta(wsC,'D5',cB.ciclo-cA.ciclo,null);           // Ciclo — neutro
+  colorDelta(wsC,'D6',fd,'lower');                       // Frequência — descer é melhor
+  colorDelta(wsC,'D7',cB.trips-cA.trips,'higher');       // Viagens/dia — subir é melhor
+  colorDelta(wsC,'D9',r2(cB.kmDia-cA.kmDia),null);       // Kms/dia — neutro
+  if(vcAi&&vcBi) colorDelta(wsC,'D10',r2(vcBi-vcAi),'lower'); // VC ida — descer é melhor
+  if(vcAm&&vcBm) colorDelta(wsC,'D11',r2(vcBm-vcAm),'lower'); // VC média — descer é melhor
+  // Veredicto de fiabilidade na coluna E (linha 12)
+  if(vcAm&&vcBm) applyStyle(wsC,'E12', vcBm<vcAm?stGreen : vcBm>vcAm?stRed : stLabel);
   XLSX.utils.book_append_sheet(wb,wsC,'Comparação');
 
   XLSX.writeFile(wb,'horario_'+linha+'.xlsx');
