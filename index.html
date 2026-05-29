@@ -1,8 +1,13 @@
-
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TUB · Optimizador de Frota e Horários</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 :root{
   --tub:#009FD4;--tub-dark:#007BB5;--tub-pale:#EDF7FC;--tub-pale2:#D6EFF8;
   --ink:#1C2B36;--ink2:#4A6070;--ink3:#8FA8B8;
@@ -10,7 +15,7 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
   --ok:#16A34A;--warn:#D97706;--danger:#DC2626;
   --ff:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--r:8px;
 }
-.app{font-family:var(--ff);color:var(--ink);background:var(--surface)}
+body{font-family:var(--ff);color:var(--ink);background:var(--surface)}
 .topbar{background:var(--tub);padding:12px 20px;display:flex;align-items:center;gap:10px}
 .topbar-logo{font-family:var(--fm);font-size:15px;font-weight:500;color:var(--white);background:rgba(255,255,255,.15);padding:4px 9px;border-radius:5px}
 .topbar-sep{width:1px;height:16px;background:rgba(255,255,255,.25)}
@@ -19,68 +24,75 @@ h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,
 .tab{padding:9px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;border:none;background:transparent;font-family:var(--ff);border-bottom:2px solid transparent;transition:all .15s}
 .tab.active{color:var(--white);border-bottom-color:var(--white)}
 .tab:hover:not(.active){color:rgba(255,255,255,.85)}
-.body{padding:20px}
+.body{padding:16px;max-width:1100px;margin:0 auto}
 .panel{display:none}.panel.active{display:block}
-.card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:12px}
-.card-title{font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.grid5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.field{display:flex;flex-direction:column;gap:5px}
+.card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:12px;font-weight:500;color:var(--ink2)}
-input[type=text],input[type=number],input[type=time]{font-family:var(--ff);font-size:13px;padding:7px 10px;border:0.5px solid var(--border);border-radius:6px;background:var(--white);color:var(--ink);outline:none;width:100%;transition:border .15s}
-input:focus{border-color:var(--tub)}
+input[type=text],input[type=number],input[type=time],select{font-family:var(--ff);font-size:13px;padding:6px 9px;border:0.5px solid var(--border);border-radius:6px;background:var(--white);color:var(--ink);outline:none;width:100%;transition:border .15s}
+input:focus,select:focus{border-color:var(--tub)}
 input[readonly]{background:var(--tub-pale);color:var(--tub-dark);font-weight:600}
-.scenario-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
-.scenario{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:16px}
-.scenario.a{border-top:3px solid var(--ink3)}
-.scenario.b{border-top:3px solid var(--tub)}
-.scenario-title{font-size:12px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:6px}
-.badge-a{background:var(--surface);color:var(--ink2);font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
-.badge-b{background:var(--tub-pale);color:var(--tub-dark);font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
-.metric{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:11px 13px}
+.metric{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px}
 .metric.blue{background:var(--tub);border-color:var(--tub)}
 .metric.ok{background:#F0FDF4;border-color:#86EFAC}
 .metric.warn{background:#FFFBEB;border-color:#FCD34D}
-.metric.danger{background:#FEF2F2;border-color:#FCA5A5}
-.metric-label{font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:3px}
+.metric-label{font-size:10px;font-weight:500;color:var(--ink3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
 .metric.blue .metric-label{color:rgba(255,255,255,.7)}
-.metric-val{font-size:18px;font-weight:600;color:var(--ink);font-family:var(--fm)}
+.metric-val{font-size:17px;font-weight:600;color:var(--ink);font-family:var(--fm)}
 .metric.blue .metric-val{color:var(--white)}
 .metric.ok .metric-val{color:var(--ok)}
 .metric.warn .metric-val{color:var(--warn)}
-.metric.danger .metric-val{color:var(--danger)}
-.metric-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.metric-sub{font-size:10px;color:var(--ink3);margin-top:1px}
 .metric.blue .metric-sub{color:rgba(255,255,255,.6)}
-.btn{font-family:var(--ff);font-size:13px;font-weight:500;padding:8px 18px;border-radius:6px;cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--ink);transition:all .15s}
+.btn{font-family:var(--ff);font-size:13px;font-weight:500;padding:7px 16px;border-radius:6px;cursor:pointer;border:0.5px solid var(--border);background:var(--white);color:var(--ink);transition:all .15s}
 .btn:hover{background:var(--surface)}
 .btn-primary{background:var(--tub);color:var(--white);border-color:var(--tub)}
 .btn-primary:hover{background:var(--tub-dark)}
-.btn-sm{padding:5px 12px;font-size:12px}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-danger{background:#FEF2F2;color:var(--danger);border-color:#FCA5A5}
+.btn-sm{padding:4px 10px;font-size:12px}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead tr{border-bottom:1.5px solid var(--tub)}
-thead th{padding:7px 9px;text-align:left;font-weight:500;font-size:11px;color:var(--tub);background:var(--tub-pale)}
+thead th{padding:6px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--tub);background:var(--tub-pale)}
 tbody tr{border-bottom:0.5px solid var(--border2)}
 tbody tr:hover{background:var(--tub-pale)}
-td{padding:6px 9px;color:var(--ink)}
-.vbadge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;font-family:var(--fm)}
-.comp-table-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.comp-section-title{font-size:11px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.delta-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
-.delta-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px}
-.delta-label{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
-.delta-val{font-size:16px;font-weight:600;font-family:var(--fm)}
-.delta-sub{font-size:11px;color:var(--ink3);margin-top:2px}
-.better{color:var(--ok)}.worse{color:var(--danger)}.neutral{color:var(--ink3)}
-.alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px;border-left:3px solid}
-.alert-info{background:var(--tub-pale);border-color:var(--tub);color:var(--tub-dark)}
-.divider{border:none;border-top:0.5px solid var(--border2);margin:14px 0}
+tbody tr.desdobramento{background:#FFFBEB}
+tbody tr.desdobramento:hover{background:#FEF3C7}
+td{padding:6px 8px;color:var(--ink)}
+.vbadge{display:inline-block;font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;font-family:var(--fm)}
+.dbadge{display:inline-block;font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;background:#FEF3C7;color:#92400E}
+.scenario-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px}
+.scenario{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.scenario.a{border-top:3px solid var(--ink3)}
+.scenario.b{border-top:3px solid var(--tub)}
+.scenario-title{font-size:12px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.badge-a{background:var(--surface);color:var(--ink2);font-size:11px;padding:2px 7px;border-radius:4px}
+.badge-b{background:var(--tub-pale);color:var(--tub-dark);font-size:11px;padding:2px 7px;border-radius:4px}
+.comp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.delta-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.delta-card{background:var(--white);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px}
+.delta-label{font-size:10px;color:var(--ink3);margin-bottom:3px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.delta-val{font-size:15px;font-weight:600;font-family:var(--fm)}
+.delta-sub{font-size:10px;color:var(--ink3);margin-top:1px}
+.better{color:var(--ok)}.worse{color:var(--danger)}.same{color:var(--ink3)}
+#map{height:240px;border-radius:var(--r);border:0.5px solid var(--border);margin-bottom:10px}
+.map-legend{display:flex;gap:10px;margin-bottom:8px;font-size:12px;align-items:center;flex-wrap:wrap}
+.map-legend-item{display:flex;align-items:center;gap:4px}
+.map-dot{width:16px;height:4px;border-radius:2px}
+.vc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+.vc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--surface);border-radius:6px;font-size:12px}
+.vc-label{color:var(--ink2);font-weight:500}
+.vc-val{font-family:var(--fm);font-weight:600;color:var(--tub-dark)}
+.db-form{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:12px;margin-top:10px}
+.db-form-title{font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:10px}
+.status-msg{font-size:11px;margin-top:6px}
 </style>
+</head>
+<body>
 
-<div class="app">
-<h2 class="sr-only">Optimizador de frota TUB — comparação de cenários</h2>
 <div class="topbar">
   <span class="topbar-logo">TUB</span>
   <div class="topbar-sep"></div>
@@ -91,55 +103,76 @@ td{padding:6px 9px;color:var(--ink)}
   <button class="tab" onclick="switchTab('horarios')">Horários</button>
   <button class="tab" onclick="switchTab('comparacao')">Comparação</button>
 </div>
-
 <div class="body">
 
 <div id="tab-config" class="panel active">
   <div class="card">
-    <div class="card-title">Identificação da linha</div>
-    <div class="grid2">
-      <div class="field"><label>Número / nome</label><input type="text" id="line-name" value="943"></div>
-      <div class="field"><label>Percurso</label><input type="text" id="line-desc" value="Estação CF – Universidade do Minho"></div>
+    <div class="card-title">Selecção da linha</div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="field">
+        <label>Linha</label>
+        <select id="linha-sel" onchange="onLinhaSelect()">
+          <option value="">— selecciona uma linha —</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Descrição / percurso</label>
+        <input type="text" id="line-desc" placeholder="ex: Ponte de Prado – Bom Jesus">
+      </div>
+    </div>
+    <div id="map"></div>
+    <div class="map-legend">
+      <div class="map-legend-item"><div class="map-dot" style="background:#009FD4"></div><span>Ida</span></div>
+      <div class="map-legend-item"><div class="map-dot" style="background:#F59E0B"></div><span>Volta</span></div>
+      <span id="map-status" class="status-msg" style="color:var(--ink3)"></span>
     </div>
   </div>
 
   <div class="scenario-wrap">
     <div class="scenario a">
       <div class="scenario-title"><span class="badge-a">Cenário A</span> Actual</div>
-      <div class="grid3" style="margin-bottom:10px">
-        <div class="field"><label>Tempo ida (min)</label><input type="number" id="a-ida" value="15" min="1" oninput="updateScenario('a')"></div>
-        <div class="field"><label>Tempo volta (min)</label><input type="number" id="a-volta" value="15" min="1" oninput="updateScenario('a')"></div>
+      <div class="grid3" style="margin-bottom:8px">
+        <div class="field"><label>Tempo ida (min)</label><input type="number" id="a-ida" value="15" min="1" oninput="updateS('a')"></div>
+        <div class="field"><label>Tempo volta (min)</label><input type="number" id="a-volta" value="15" min="1" oninput="updateS('a')"></div>
         <div class="field"><label>Ciclo (min)</label><input type="number" id="a-ciclo" readonly></div>
       </div>
-      <div class="grid3" style="margin-bottom:10px">
-        <div class="field"><label>Viaturas</label><input type="number" id="a-veh" value="1" min="1" oninput="updateScenario('a')"></div>
-        <div class="field"><label>Início</label><input type="time" id="a-inicio" value="21:00" oninput="updateScenario('a')"></div>
-        <div class="field"><label>Fim</label><input type="time" id="a-fim" value="01:30" oninput="updateScenario('a')"></div>
+      <div class="grid3" style="margin-bottom:8px">
+        <div class="field"><label>Viaturas</label><input type="number" id="a-veh" value="1" min="1" oninput="updateS('a')"></div>
+        <div class="field"><label>Início</label><input type="time" id="a-inicio" value="21:00" oninput="updateS('a')"></div>
+        <div class="field"><label>Fim</label><input type="time" id="a-fim" value="01:30" oninput="updateS('a')"></div>
       </div>
-      <div class="grid2" style="margin-bottom:10px">
-        <div class="field"><label>Kms ida</label><input type="number" id="a-km-ida" value="4.2" step="0.1" min="0" oninput="updateScenario('a')"></div>
-        <div class="field"><label>Kms volta</label><input type="number" id="a-km-volta" value="4.2" step="0.1" min="0" oninput="updateScenario('a')"></div>
+      <div class="grid2" style="margin-bottom:8px">
+        <div class="field"><label>Kms ida</label><input type="number" id="a-km-ida" value="4.72" step="0.01" oninput="updateS('a')"></div>
+        <div class="field"><label>Kms volta</label><input type="number" id="a-km-volta" value="6.15" step="0.01" oninput="updateS('a')"></div>
       </div>
-      <div class="grid4" id="a-metrics" style="margin-top:4px"></div>
+      <div class="vc-grid" id="a-vc"></div>
+      <div class="grid4" id="a-metrics" style="margin-top:8px"></div>
     </div>
 
     <div class="scenario b">
       <div class="scenario-title"><span class="badge-b">Cenário B</span> Proposto</div>
-      <div class="grid3" style="margin-bottom:10px">
-        <div class="field"><label>Tempo ida (min)</label><input type="number" id="b-ida" value="25" min="1" oninput="updateScenario('b')"></div>
-        <div class="field"><label>Tempo volta (min)</label><input type="number" id="b-volta" value="25" min="1" oninput="updateScenario('b')"></div>
+      <div class="grid3" style="margin-bottom:8px">
+        <div class="field"><label>Tempo ida (min)</label><input type="number" id="b-ida" value="25" min="1" oninput="updateS('b')"></div>
+        <div class="field"><label>Tempo volta (min)</label><input type="number" id="b-volta" value="25" min="1" oninput="updateS('b')"></div>
         <div class="field"><label>Ciclo (min)</label><input type="number" id="b-ciclo" readonly></div>
       </div>
-      <div class="grid3" style="margin-bottom:10px">
-        <div class="field"><label>Viaturas</label><input type="number" id="b-veh" value="2" min="1" oninput="updateScenario('b')"></div>
-        <div class="field"><label>Início</label><input type="time" id="b-inicio" value="21:00" oninput="updateScenario('b')"></div>
-        <div class="field"><label>Fim</label><input type="time" id="b-fim" value="01:40" oninput="updateScenario('b')"></div>
+      <div class="grid3" style="margin-bottom:8px">
+        <div class="field"><label>Viaturas</label><input type="number" id="b-veh" value="2" min="1" oninput="updateS('b')"></div>
+        <div class="field"><label>Início</label><input type="time" id="b-inicio" value="21:00" oninput="updateS('b')"></div>
+        <div class="field"><label>Fim</label><input type="time" id="b-fim" value="01:40" oninput="updateS('b')"></div>
       </div>
-      <div class="grid2" style="margin-bottom:10px">
-        <div class="field"><label>Kms ida</label><input type="number" id="b-km-ida" value="6.5" step="0.1" min="0" oninput="updateScenario('b')"></div>
-        <div class="field"><label>Kms volta</label><input type="number" id="b-km-volta" value="6.5" step="0.1" min="0" oninput="updateScenario('b')"></div>
+      <div class="grid2" style="margin-bottom:8px">
+        <div class="field"><label>Kms ida</label><input type="number" id="b-km-ida" value="4.72" step="0.01" oninput="updateS('b')"></div>
+        <div class="field"><label>Kms volta</label><input type="number" id="b-km-volta" value="6.15" step="0.01" oninput="updateS('b')"></div>
       </div>
-      <div class="grid4" id="b-metrics" style="margin-top:4px"></div>
+      <div class="vc-grid" id="b-vc"></div>
+      <div class="grid4" id="b-metrics" style="margin-top:8px"></div>
+
+      <div class="db-form">
+        <div class="db-form-title">Desdobramentos (viagens adicionais)</div>
+        <div id="db-list"></div>
+        <button class="btn btn-sm" style="margin-top:8px" onclick="addDesdobramento()">+ Adicionar desdobramento</button>
+      </div>
     </div>
   </div>
 
@@ -147,18 +180,22 @@ td{padding:6px 9px;color:var(--ink)}
 </div>
 
 <div id="tab-horarios" class="panel">
-  <div class="comp-table-wrap">
+  <div class="comp-wrap">
     <div>
-      <div class="comp-section-title"><span class="badge-a">Cenário A</span> <span id="h-a-title" style="color:var(--ink2);font-weight:400;font-size:11px"></span></div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
-        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+      <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span class="badge-a">Cenário A</span><span id="h-a-info" style="font-weight:400;color:var(--ink3)"></span>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th><th>Tipo</th></tr></thead>
         <tbody id="tbody-a"></tbody></table>
       </div>
     </div>
     <div>
-      <div class="comp-section-title"><span class="badge-b">Cenário B</span> <span id="h-b-title" style="color:var(--ink2);font-weight:400;font-size:11px"></span></div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
-        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+      <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span class="badge-b">Cenário B</span><span id="h-b-info" style="font-weight:400;color:var(--ink3)"></span>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th><th>Tipo</th></tr></thead>
         <tbody id="tbody-b"></tbody></table>
       </div>
     </div>
@@ -169,165 +206,254 @@ td{padding:6px 9px;color:var(--ink)}
   <div class="card">
     <div class="card-title">Indicadores — delta A → B</div>
     <div class="delta-grid" id="delta-grid"></div>
-    <div class="divider"></div>
-    <div class="card-title">Quilómetros</div>
-    <div class="delta-grid" id="km-grid"></div>
+    <div style="border-top:0.5px solid var(--border2);padding-top:10px;margin-top:4px">
+      <div class="card-title">Quilómetros e velocidade comercial</div>
+      <div class="delta-grid" id="km-grid"></div>
+    </div>
   </div>
-
-  <div class="comp-table-wrap">
+  <div class="comp-wrap" style="margin-bottom:12px">
     <div>
-      <div class="comp-section-title"><span class="badge-a">Cenário A</span></div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
-        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+      <div style="font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:6px"><span class="badge-a">Cenário A</span></div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th><th>Tipo</th></tr></thead>
         <tbody id="comp-tbody-a"></tbody></table>
       </div>
     </div>
     <div>
-      <div class="comp-section-title"><span class="badge-b">Cenário B</span></div>
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:0">
-        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th></tr></thead>
+      <div style="font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:6px"><span class="badge-b">Cenário B</span></div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table><thead><tr><th>Partida</th><th>Viat.</th><th>Chegada</th><th>Regresso</th><th>Tipo</th></tr></thead>
         <tbody id="comp-tbody-b"></tbody></table>
       </div>
     </div>
   </div>
-
-  <div style="margin-top:14px">
-    <button class="btn btn-primary btn-sm" onclick="exportXLSX()"><i class="ti ti-download" aria-hidden="true"></i> Exportar relatório XLSX</button>
-  </div>
+  <button class="btn btn-primary btn-sm" onclick="exportXLSX()">Exportar relatório XLSX</button>
 </div>
 
 </div>
-</div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+// ===== CAMINHO DO GEOJSON =====
+// O ficheiro está em: TUB_Explora-o/Linhas/linhas.geojson
+// Caminho relativo a partir do index.html na raiz do repositório:
+const GEOJSON_PATH = 'Linhas/linhas.geojson';
+
+// Lookup de kms por linha (extraído do GeoJSON; usado para preenchimento imediato)
+const KM_DATA={"002":{"i":12.67,"v":13.01},"003":{"i":11.52,"v":11.48},"005":{"i":7.11,"v":7.57},"006":{"i":6.49,"v":7.89},"007":{"i":15.86,"v":14.12},"008":{"i":3.87,"v":3.63},"009":{"i":19.52,"v":19.62},"012":{"i":10.92,"v":23.52},"014":{"i":12.52,"v":11.38},"018":{"i":6.32,"v":7.34},"019":{"i":6.9,"v":7.2},"020":{"i":10.52,"v":11.99},"021":{"i":11.41,"v":8.78},"023":{"i":12.78,"v":11.21},"032":{"i":10.93,"v":7.08},"033":{"i":11.75,"v":11.24},"034":{"i":13.69,"v":14.59},"035":{"i":19.61,"v":13.7},"036":{"i":12.77,"v":11.61},"037":{"i":17.34,"v":13.92},"038":{"i":9.03,"v":10.01},"039":{"i":7.85,"v":9.58},"043":{"i":4.31,"v":4.44},"044":{"i":9.17,"v":8.87},"045":{"i":12.01,"v":10.93},"046":{"i":7.86,"v":7.41},"050":{"i":9.99,"v":9.6},"052":{"i":7.88,"v":7.77},"053":{"i":6.34,"v":8.04},"054":{"i":5.75,"v":4.36},"057":{"i":6.63,"v":7.37},"058":{"i":6.42,"v":7.06},"059":{"i":11.5,"v":10.26},"060":{"i":8.44,"v":10.67},"063":{"i":9.29,"v":10.25},"070":{"i":8.79,"v":8.74},"072":{"i":11.22,"v":8.29},"073":{"i":16.1,"v":13.67},"076":{"i":null,"v":8.91},"080":{"i":9.1,"v":7.43},"081":{"i":9.0,"v":6.73},"083":{"i":21.08,"v":12.59},"084":{"i":17.71,"v":16.53},"085":{"i":13.42,"v":12.19},"087":{"i":4.82,"v":5.37},"088":{"i":9.28,"v":9.95},"089":{"i":15.66,"v":14.91},"090":{"i":18.49,"v":18.13},"091":{"i":21.72,"v":22.41},"092":{"i":10.61,"v":8.96},"093":{"i":18.9,"v":14.89},"094":{"i":6.22,"v":5.05},"095":{"i":10.05,"v":10.35},"096":{"i":8.16,"v":8.24},"097":{"i":8.54,"v":9.19},"098":{"i":7.89,"v":7.89},"315":{"i":4.49,"v":5.55},"501":{"i":11.01,"v":10.71},"900":{"i":3.93,"v":3.79},"914":{"i":13.75,"v":13.94},"920":{"i":10.1,"v":11.47},"928":{"i":10.56,"v":11.81},"933":{"i":11.73,"v":12.14},"945":{"i":9.37,"v":9.35},"949":{"i":16.65,"v":11.03},"995":{"i":10.11,"v":10.38},"024":{"i":13.93,"v":14.16},"031":{"i":8.78,"v":9.45},"040":{"i":14.06,"v":null},"042":{"i":4.42,"v":null},"066":{"i":17.39,"v":17.68},"074":{"i":6.8,"v":5.73},"907":{"i":11.0,"v":12.22},"911":{"i":10.34,"v":null},"935":{"i":18.04,"v":null},"937":{"i":16.17,"v":null},"942":{"i":5.39,"v":null},"943":{"i":4.72,"v":6.15},"013":{"i":17.17,"v":12.47},"099":{"i":10.99,"v":10.65},"041":{"i":16.14,"v":null}};
+
 const VS=[{bg:'#DBEAFE',tc:'#1E3A8A'},{bg:'#D1FAE5',tc:'#064E3B'},{bg:'#EDE9FE',tc:'#3730A3'},{bg:'#FEF3C7',tc:'#78350F'},{bg:'#FCE7F3',tc:'#831843'},{bg:'#CFFAFE',tc:'#164E63'},{bg:'#FEE2E2',tc:'#7F1D1D'},{bg:'#F3F4F6',tc:'#111827'}];
 const LB='ABCDEFGHIJKLMNOPQRST';
 const toMin=s=>{if(!s||!s.includes(':'))return 0;const[h,m]=s.split(':').map(Number);return h<6?h*60+m+1440:h*60+m;};
 const toStr=m=>{const mm=((m%1440)+1440)%1440;return String(Math.floor(mm/60)).padStart(2,'0')+':'+String(mm%60).padStart(2,'0');};
-const ff=f=>Number.isInteger(f)?String(f):f.toFixed(1);
 const r2=n=>Math.round(n*100)/100;
+const ff=f=>Number.isInteger(f)?String(f):f.toFixed(1);
 
-function getScenario(s){
+let map, layerIda, layerVolta, geojsonCache=null;
+
+function initMap(){
+  map=L.map('map',{zoomControl:true}).setView([41.55,-8.42],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
+}
+
+function loadGeoJSON(){
+  // Carrega o ficheiro uma única vez e mantém em cache
+  if(geojsonCache) return Promise.resolve(geojsonCache);
+  return fetch(GEOJSON_PATH)
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(data=>{ geojsonCache=data; return data; });
+}
+
+function loadLinhaOnMap(key){
+  if(layerIda){map.removeLayer(layerIda);layerIda=null;}
+  if(layerVolta){map.removeLayer(layerVolta);layerVolta=null;}
+  if(!key)return;
+  const status=document.getElementById('map-status');
+  status.textContent='A carregar traçado…';
+  status.style.color='var(--ink3)';
+  loadGeoJSON().then(data=>{
+    const featIda=data.features.filter(f=>f.properties.Name.split(' ')[0]===key&&f.properties.FolderPath.includes('Ida'));
+    const featVolta=data.features.filter(f=>f.properties.Name.split(' ')[0]===key&&f.properties.FolderPath.includes('Volta'));
+    if(featIda.length){
+      layerIda=L.geoJSON({type:'FeatureCollection',features:featIda},{style:{color:'#009FD4',weight:3,opacity:.9}}).addTo(map);
+    }
+    if(featVolta.length){
+      layerVolta=L.geoJSON({type:'FeatureCollection',features:featVolta},{style:{color:'#F59E0B',weight:3,opacity:.9}}).addTo(map);
+    }
+    if(layerIda||layerVolta){
+      let combined=(layerIda||layerVolta).getBounds();
+      if(layerIda&&layerVolta) combined=layerIda.getBounds().extend(layerVolta.getBounds());
+      map.fitBounds(combined,{padding:[20,20]});
+      status.textContent='Traçado carregado.';
+      status.style.color='var(--ok)';
+    } else {
+      status.textContent='Sem traçado para esta linha.';
+      status.style.color='var(--warn)';
+    }
+  }).catch(err=>{
+    status.textContent='Erro ao carregar GeoJSON: '+err.message+' (verifica o caminho '+GEOJSON_PATH+')';
+    status.style.color='var(--danger)';
+  });
+}
+
+function onLinhaSelect(){
+  const key=document.getElementById('linha-sel').value;
+  if(!key)return;
+  const km=KM_DATA[key];
+  if(km){
+    const ida=km.i||0;const volta=km.v||0;
+    ['a','b'].forEach(s=>{
+      document.getElementById(s+'-km-ida').value=ida;
+      document.getElementById(s+'-km-volta').value=volta;
+      updateS(s);
+    });
+  }
+  loadLinhaOnMap(key);
+}
+
+function getS(s){
   return{
     ida:parseInt(document.getElementById(s+'-ida').value)||15,
     volta:parseInt(document.getElementById(s+'-volta').value)||15,
     veh:parseInt(document.getElementById(s+'-veh').value)||1,
-    inicio:document.getElementById(s+'-inicio').value||'21:00',
+    ini:document.getElementById(s+'-inicio').value||'21:00',
     fim:document.getElementById(s+'-fim').value||'01:30',
-    kmIda:parseFloat(document.getElementById(s+'-km-ida').value)||0,
-    kmVolta:parseFloat(document.getElementById(s+'-km-volta').value)||0,
+    kmI:parseFloat(document.getElementById(s+'-km-ida').value)||0,
+    kmV:parseFloat(document.getElementById(s+'-km-volta').value)||0,
   };
 }
 
-function calcScenario(p){
+function calcVC(km,min){if(!min)return null;return r2(km/(min/60));}
+
+function updateVC(s,p){
+  const vcIda=calcVC(p.kmI,p.ida);
+  const vcVolta=calcVC(p.kmV,p.volta);
+  const kmTotal=r2(p.kmI+p.kmV);
+  const vcMedia=calcVC(kmTotal,p.ida+p.volta);
+  document.getElementById(s+'-vc').innerHTML=`
+    <div class="vc-row"><span class="vc-label">VC Ida</span><span class="vc-val">${vcIda||'—'} km/h</span></div>
+    <div class="vc-row"><span class="vc-label">VC Volta</span><span class="vc-val">${vcVolta||'—'} km/h</span></div>
+    <div class="vc-row"><span class="vc-label">VC Média</span><span class="vc-val">${vcMedia||'—'} km/h</span></div>`;
+}
+
+function calcScen(p){
   const ciclo=p.ida+p.volta;
-  const freq=Math.round(ciclo/p.veh*10)/10;
-  const ini=toMin(p.inicio);const fim=toMin(p.fim);
+  const freq=r2(ciclo/p.veh);
+  const ini=toMin(p.ini);const fim=toMin(p.fim);
   const fa=fim<ini?fim+1440:fim;
   let trips=0,t=ini;while(t<=fa){trips++;t+=freq;}
-  const kmViagem=p.kmIda+p.kmVolta;
+  const kmViagem=r2(p.kmI+p.kmV);
   const kmDia=r2(trips*kmViagem);
-  const kmDiaVeh=r2(kmDia/p.veh);
-  return{ciclo,freq,trips,kmViagem,kmDia,kmDiaVeh,ini,fim:toMin(p.fim),fa};
+  return{ciclo,freq,trips,kmViagem,kmDia,ini,fim:toMin(p.fim),fa};
+}
+
+function updateS(s){
+  const p=getS(s);
+  const c=p.ida+p.volta;
+  document.getElementById(s+'-ciclo').value=c;
+  const calc=calcScen(p);
+  updateVC(s,p);
+  document.getElementById(s+'-metrics').innerHTML=`
+    <div class="metric blue"><div class="metric-label">Ciclo</div><div class="metric-val">${c} min</div></div>
+    <div class="metric"><div class="metric-label">Frequência</div><div class="metric-val">${ff(calc.freq)} min</div></div>
+    <div class="metric"><div class="metric-label">Viagens/dia</div><div class="metric-val">${calc.trips}</div></div>
+    <div class="metric"><div class="metric-label">Kms/dia</div><div class="metric-val">${calc.kmDia}</div></div>`;
 }
 
 function buildRows(p,calc){
   const rows=[];let t=calc.ini,vi=0;
   while(t<=calc.fa){
     const dep=t,arr=t+p.ida,ret=t+calc.ciclo;
-    const vl=LB[vi%p.veh];const vc=VS[vi%p.veh];
-    const isLast=t+calc.freq>calc.fa;
-    rows.push({dep:toStr(dep),arr:toStr(arr),ret:ret<=calc.fa+calc.freq?toStr(ret):'—',vl,vc,isLast});
+    rows.push({dep:toStr(dep),arr:toStr(arr),ret:ret<=calc.fa+calc.freq?toStr(ret):'—',vl:LB[vi%p.veh],vc:VS[vi%p.veh],isLast:t+calc.freq>calc.fa,tipo:'normal'});
     vi++;t+=calc.freq;
   }
   return rows;
 }
 
-function renderMetrics(s,p,calc){
-  const el=document.getElementById(s+'-metrics');
-  el.innerHTML=`
-    <div class="metric"><div class="metric-label">Ciclo</div><div class="metric-val">${calc.ciclo} min</div></div>
-    <div class="metric"><div class="metric-label">Frequência</div><div class="metric-val">${ff(calc.freq)} min</div></div>
-    <div class="metric"><div class="metric-label">Viagens/dia</div><div class="metric-val">${calc.trips}</div></div>
-    <div class="metric"><div class="metric-label">Kms/dia</div><div class="metric-val">${calc.kmDia}</div></div>`;
-}
-
-function updateScenario(s){
-  const p=getScenario(s);
-  const ciclo=p.ida+p.volta;
-  document.getElementById(s+'-ciclo').value=ciclo;
-  const calc=calcScenario(p);
-  renderMetrics(s,p,calc);
-}
-
-function renderTbody(tbodyId,rows){
-  const tb=document.getElementById(tbodyId);tb.innerHTML='';
+function renderTbody(id,rows){
+  const tb=document.getElementById(id);tb.innerHTML='';
   rows.forEach(r=>{
     const tr=document.createElement('tr');
+    if(r.tipo==='desdobramento') tr.className='desdobramento';
+    const tipoBadge=r.tipo==='desdobramento'?`<span class="dbadge">Desdobramento</span>`:`<span style="font-size:10px;color:var(--ink3)">Normal</span>`;
     tr.innerHTML=`<td style="font-family:var(--fm);font-weight:600">${r.dep}</td>
       <td><span class="vbadge" style="background:${r.vc.bg};color:${r.vc.tc}">${r.vl}</span></td>
       <td style="font-family:var(--fm)">${r.arr}</td>
-      <td style="font-family:var(--fm);color:${r.ret==='—'?'var(--ink3)':'var(--ink)'}">${r.ret}</td>`;
+      <td style="font-family:var(--fm);color:${r.ret==='—'?'var(--ink3)':'var(--ink)'}">${r.ret}</td>
+      <td>${tipoBadge}${r.isLast&&r.tipo!=='desdobramento'?' <span style="font-size:10px;color:var(--ink3)">Último</span>':''}</td>`;
     tb.appendChild(tr);
   });
 }
 
-window._state={};
+let _db_count=0;
+function addDesdobramento(){
+  const id=_db_count++;
+  const div=document.createElement('div');
+  div.id='db-'+id;
+  div.style.cssText='background:var(--white);border:0.5px solid var(--border);border-radius:6px;padding:10px;margin-bottom:8px';
+  div.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:end">
+      <div class="field"><label>Partida</label><input type="time" id="db-dep-${id}" value="07:00"></div>
+      <div class="field"><label>Descrição</label><input type="text" id="db-desc-${id}" placeholder="ex: Merelim – Av. Central"></div>
+      <div class="field"><label>Kms (ida+volta)</label><input type="number" id="db-km-${id}" value="0" step="0.1" min="0"></div>
+      <button class="btn btn-danger btn-sm" onclick="removeDb(${id})" style="margin-bottom:0">✕</button>
+    </div>`;
+  document.getElementById('db-list').appendChild(div);
+}
+
+function removeDb(id){const el=document.getElementById('db-'+id);if(el)el.remove();}
+
+function getDesdobramentos(){
+  const dbs=[];
+  document.querySelectorAll('[id^="db-dep-"]').forEach(el=>{
+    const id=el.id.replace('db-dep-','');
+    dbs.push({
+      dep:el.value,
+      desc:(document.getElementById('db-desc-'+id)||{}).value||'Desdobramento',
+      km:parseFloat((document.getElementById('db-km-'+id)||{}).value)||0,
+    });
+  });
+  return dbs;
+}
 
 function generateAll(){
-  const pA=getScenario('a');const pB=getScenario('b');
-  const cA=calcScenario(pA);const cB=calcScenario(pB);
-  const rA=buildRows(pA,cA);const rB=buildRows(pB,cB);
-  window._state={pA,pB,cA,cB,rA,rB};
+  const pA=getS('a');const pB=getS('b');
+  const cA=calcScen(pA);const cB=calcScen(pB);
+  const rA=buildRows(pA,cA);
+  const dbs=getDesdobramentos();
+  const rB=buildRows(pB,cB);
+
+  dbs.forEach(db=>{
+    rB.push({dep:db.dep,arr:'—',ret:'—',vl:'D',vc:{bg:'#FEF3C7',tc:'#92400E'},isLast:false,tipo:'desdobramento',desc:db.desc,km:db.km});
+  });
+  rB.sort((a,b)=>toMin(a.dep)-toMin(b.dep));
+
+  window._st={pA,pB,cA,cB,rA,rB,dbs};
 
   renderTbody('tbody-a',rA);renderTbody('tbody-b',rB);
   renderTbody('comp-tbody-a',rA);renderTbody('comp-tbody-b',rB);
 
-  const name=document.getElementById('line-name').value||'Linha';
-  document.getElementById('h-a-title').textContent=`${pA.veh} viatura${pA.veh>1?'s':''} · ${ff(cA.freq)} min · ${cA.trips} viagens`;
-  document.getElementById('h-b-title').textContent=`${pB.veh} viatura${pB.veh>1?'s':''} · ${ff(cB.freq)} min · ${cB.trips} viagens`;
+  document.getElementById('h-a-info').textContent=`${pA.veh} viatura${pA.veh>1?'s':''} · ${ff(cA.freq)} min · ${cA.trips} viagens`;
+  document.getElementById('h-b-info').textContent=`${pB.veh} viatura${pB.veh>1?'s':''} · ${ff(cB.freq)} min · ${cB.trips} viagens + ${dbs.length} desdobr.`;
 
-  const freqDelta=r2(cB.freq-cA.freq);
-  const tripDelta=cB.trips-cA.trips;
-  const kmDelta=r2(cB.kmDia-cA.kmDia);
-  const kmVDelta=r2(cB.kmViagem-cA.kmViagem);
-  const vehDelta=pB.veh-pA.veh;
-
-  function dClass(val,invertGood){
-    if(val===0)return'neutral';
-    const pos=val>0;
-    return(pos&&!invertGood)||(!pos&&invertGood)?'better':'worse';
-  }
-  function dSign(val){return val>0?'+':''}
+  const fd=r2(cB.freq-cA.freq);const vd=pB.veh-pA.veh;const td=cB.trips-cA.trips;
+  const kmVd=r2((pB.kmI+pB.kmV)-(pA.kmI+pA.kmV));const kmDd=r2(cB.kmDia-cA.kmDia);
+  const dc=v=>v<0?'better':v>0?'worse':'same';const ds=v=>v>0?'+':'';
+  const vcA_i=calcVC(pA.kmI,pA.ida);const vcB_i=calcVC(pB.kmI,pB.ida);
+  const vcA_m=calcVC(r2(pA.kmI+pA.kmV),pA.ida+pA.volta);const vcB_m=calcVC(r2(pB.kmI+pB.kmV),pB.ida+pB.volta);
 
   document.getElementById('delta-grid').innerHTML=`
-    <div class="delta-card"><div class="delta-label">Frequência</div>
-      <div class="delta-val ${dClass(freqDelta,true)}">${dSign(freqDelta)}${ff(freqDelta)} min</div>
-      <div class="delta-sub">${ff(cA.freq)} → ${ff(cB.freq)} min</div></div>
-    <div class="delta-card"><div class="delta-label">Viaturas</div>
-      <div class="delta-val ${dClass(vehDelta,false)}">${dSign(vehDelta)}${vehDelta}</div>
-      <div class="delta-sub">${pA.veh} → ${pB.veh} viatura${pB.veh>1?'s':''}</div></div>
-    <div class="delta-card"><div class="delta-label">Viagens/dia</div>
-      <div class="delta-val ${dClass(tripDelta,false)}">${dSign(tripDelta)}${tripDelta}</div>
-      <div class="delta-sub">${cA.trips} → ${cB.trips} viagens</div></div>
-    <div class="delta-card"><div class="delta-label">Ciclo</div>
-      <div class="delta-val ${dClass(cB.ciclo-cA.ciclo,true)}">${dSign(cB.ciclo-cA.ciclo)}${cB.ciclo-cA.ciclo} min</div>
-      <div class="delta-sub">${cA.ciclo} → ${cB.ciclo} min</div></div>`;
+    <div class="delta-card"><div class="delta-label">Frequência</div><div class="delta-val ${dc(fd)}">${ds(fd)}${ff(fd)} min</div><div class="delta-sub">${ff(cA.freq)} → ${ff(cB.freq)} min</div></div>
+    <div class="delta-card"><div class="delta-label">Viaturas</div><div class="delta-val ${dc(-vd)}">${ds(vd)}${vd}</div><div class="delta-sub">${pA.veh} → ${pB.veh}</div></div>
+    <div class="delta-card"><div class="delta-label">Viagens/dia</div><div class="delta-val ${dc(-td)}">${ds(td)}${td}</div><div class="delta-sub">${cA.trips} → ${cB.trips}</div></div>
+    <div class="delta-card"><div class="delta-label">Ciclo</div><div class="delta-val ${dc(cB.ciclo-cA.ciclo)}">${ds(cB.ciclo-cA.ciclo)}${cB.ciclo-cA.ciclo} min</div><div class="delta-sub">${cA.ciclo} → ${cB.ciclo} min</div></div>`;
 
   document.getElementById('km-grid').innerHTML=`
-    <div class="delta-card"><div class="delta-label">Kms/viagem (ida+volta)</div>
-      <div class="delta-val ${dClass(kmVDelta,false)}">${dSign(kmVDelta)}${r2(kmVDelta)} km</div>
-      <div class="delta-sub">${r2(pA.kmIda+pA.kmVolta)} → ${r2(pB.kmIda+pB.kmVolta)} km</div></div>
-    <div class="delta-card"><div class="delta-label">Kms/dia total</div>
-      <div class="delta-val ${dClass(kmDelta,false)}">${dSign(kmDelta)}${r2(kmDelta)} km</div>
-      <div class="delta-sub">${cA.kmDia} → ${cB.kmDia} km</div></div>
-    <div class="delta-card"><div class="delta-label">Kms/dia por viatura (A)</div>
-      <div class="delta-val">${cA.kmDiaVeh} km</div>
-      <div class="delta-sub">${cA.trips} viagens × ${r2(pA.kmIda+pA.kmVolta)} km</div></div>
-    <div class="delta-card"><div class="delta-label">Kms/dia por viatura (B)</div>
-      <div class="delta-val">${cB.kmDiaVeh} km</div>
-      <div class="delta-sub">${Math.round(cB.trips/pB.veh)} viagens × ${r2(pB.kmIda+pB.kmVolta)} km</div></div>`;
+    <div class="delta-card"><div class="delta-label">Kms/viagem</div><div class="delta-val ${dc(-kmVd)}">${ds(kmVd)}${kmVd} km</div><div class="delta-sub">${r2(pA.kmI+pA.kmV)} → ${r2(pB.kmI+pB.kmV)} km</div></div>
+    <div class="delta-card"><div class="delta-label">Kms/dia total</div><div class="delta-val ${dc(-kmDd)}">${ds(kmDd)}${kmDd} km</div><div class="delta-sub">${cA.kmDia} → ${cB.kmDia} km</div></div>
+    <div class="delta-card"><div class="delta-label">VC ida (A→B)</div><div class="delta-val">${vcA_i||'—'} → ${vcB_i||'—'}</div><div class="delta-sub">km/h</div></div>
+    <div class="delta-card"><div class="delta-label">VC média (A→B)</div><div class="delta-val">${vcA_m||'—'} → ${vcB_m||'—'}</div><div class="delta-sub">km/h</div></div>`;
 
   switchTab('horarios');
 }
@@ -337,54 +463,64 @@ function switchTab(id){
     document.querySelectorAll('.tab')[i].classList.toggle('active',t===id);
     document.getElementById('tab-'+t).classList.toggle('active',t===id);
   });
+  if(id==='config'&&map){setTimeout(()=>map.invalidateSize(),100);}
 }
 
 function exportXLSX(){
-  const st=window._state;
-  if(!st||!st.rA){alert('Gera primeiro os horários.');return;}
-  const{pA,pB,cA,cB,rA,rB}=st;
-  const name=document.getElementById('line-name').value||'Linha';
+  const st=window._st;if(!st){alert('Gera primeiro os horários.');return;}
+  const{pA,pB,cA,cB,rA,rB,dbs}=st;
+  const linha=document.getElementById('linha-sel').value||'Linha';
   const desc=document.getElementById('line-desc').value||'';
   const wb=XLSX.utils.book_new();
+  const vcAi=calcVC(pA.kmI,pA.ida);const vcBi=calcVC(pB.kmI,pB.ida);
+  const vcAm=calcVC(r2(pA.kmI+pA.kmV),pA.ida+pA.volta);const vcBm=calcVC(r2(pB.kmI+pB.kmV),pB.ida+pB.volta);
 
-  const mkSched=(rows,p,calc,label)=>{
-    const hdr=[['Linha',name,'Percurso',desc],['Cenário',label],[],
-      ['Tempo ida (min)',p.ida,'Tempo volta (min)',p.volta,'Ciclo (min)',calc.ciclo],
-      ['Viaturas',p.veh,'Frequência (min)',ff(calc.freq),'Viagens/dia',calc.trips],
-      ['Kms ida',p.kmIda,'Kms volta',p.kmVolta,'Kms/dia',calc.kmDia],[],
-      ['Partida','Viatura','Chegada destino','Regresso origem'],
-      ...rows.map(r=>[r.dep,r.vl,r.arr,r.ret])];
-    return hdr;
-  };
+  const mkSheet=(rows,p,calc,label)=>[
+    ['Linha',linha,'Percurso',desc],['Cenário',label],[],
+    ['Tempo ida (min)',p.ida,'Tempo volta (min)',p.volta,'Ciclo (min)',calc.ciclo],
+    ['Viaturas',p.veh,'Frequência (min)',ff(calc.freq),'Viagens/dia',calc.trips],
+    ['Kms ida',p.kmI,'Kms volta',p.kmV,'Kms/dia total',calc.kmDia],
+    ['VC ida (km/h)',calcVC(p.kmI,p.ida)||'','VC volta (km/h)',calcVC(p.kmV,p.volta)||'','VC média (km/h)',calcVC(r2(p.kmI+p.kmV),p.ida+p.volta)||''],[],
+    ['Partida','Viatura','Chegada destino','Regresso origem','Tipo'],
+    ...rows.map(r=>[r.dep,r.vl,r.arr,r.ret,r.tipo==='desdobramento'?'Desdobramento: '+(r.desc||''):r.isLast?'Último serviço':'Normal'])
+  ];
 
-  const wsA=XLSX.utils.aoa_to_sheet(mkSched(rA,pA,cA,'Cenário A — Actual'));
-  wsA['!cols']=[{wch:16},{wch:10},{wch:16},{wch:16}];
+  const wsA=XLSX.utils.aoa_to_sheet(mkSheet(rA,pA,cA,'Cenário A — Actual'));
+  wsA['!cols']=[{wch:16},{wch:8},{wch:16},{wch:16},{wch:24}];
   XLSX.utils.book_append_sheet(wb,wsA,'Cenário A');
 
-  const wsB=XLSX.utils.aoa_to_sheet(mkSched(rB,pB,cB,'Cenário B — Proposto'));
-  wsB['!cols']=[{wch:16},{wch:10},{wch:16},{wch:16}];
+  const wsB=XLSX.utils.aoa_to_sheet(mkSheet(rB,pB,cB,'Cenário B — Proposto'));
+  wsB['!cols']=[{wch:16},{wch:8},{wch:16},{wch:16},{wch:30}];
   XLSX.utils.book_append_sheet(wb,wsB,'Cenário B');
 
-  const freqD=r2(cB.freq-cA.freq);const tripD=cB.trips-cA.trips;
-  const kmD=r2(cB.kmDia-cA.kmDia);const kmVD=r2((pB.kmIda+pB.kmVolta)-(pA.kmIda+pA.kmVolta));
+  const fd=r2(cB.freq-cA.freq);const vd=pB.veh-pA.veh;
   const comp=[
-    ['Linha',name,'Percurso',desc],[],
+    ['Linha',linha,'Percurso',desc],[],
     ['Indicador','Cenário A','Cenário B','Delta','Sentido'],
-    ['Viaturas',pA.veh,pB.veh,pB.veh-pA.veh,pB.veh>pA.veh?'↑ Aumento':'↓ Redução'],
+    ['Viaturas',pA.veh,pB.veh,vd,vd>0?'Aumento':vd<0?'Redução':'Igual'],
     ['Ciclo (min)',cA.ciclo,cB.ciclo,cB.ciclo-cA.ciclo,''],
-    ['Frequência (min)',ff(cA.freq),ff(cB.freq),ff(freqD),freqD<0?'↑ Melhoria':freqD>0?'↓ Degradação':'Igual'],
-    ['Viagens/dia',cA.trips,cB.trips,tripD,tripD>0?'↑ Mais viagens':tripD<0?'↓ Menos viagens':'Igual'],
-    ['Kms/viagem',r2(pA.kmIda+pA.kmVolta),r2(pB.kmIda+pB.kmVolta),kmVD,''],
-    ['Kms/dia total',cA.kmDia,cB.kmDia,kmD,kmD>0?'↑ Mais kms':'↓ Menos kms'],
-    ['Kms/dia por viatura (A)',cA.kmDiaVeh,'','',''],
-    ['Kms/dia por viatura (B)','',cB.kmDiaVeh,'',''],
+    ['Frequência (min)',ff(cA.freq),ff(cB.freq),ff(fd),fd<0?'Melhoria':fd>0?'Degradação':'Igual'],
+    ['Viagens/dia',cA.trips,cB.trips,cB.trips-cA.trips,''],
+    ['Kms/viagem',r2(pA.kmI+pA.kmV),r2(pB.kmI+pB.kmV),r2((pB.kmI+pB.kmV)-(pA.kmI+pA.kmV)),''],
+    ['Kms/dia total',cA.kmDia,cB.kmDia,r2(cB.kmDia-cA.kmDia),''],
+    ['VC ida (km/h)',vcAi||'',vcBi||'',vcAi&&vcBi?r2(vcBi-vcAi):'',''],
+    ['VC média (km/h)',vcAm||'',vcBm||'',vcAm&&vcBm?r2(vcBm-vcAm):'',''],
+    [],['Desdobramentos no cenário B: '+dbs.length],
+    ...dbs.map(d=>['',d.dep,d.desc,d.km+' km',''])
   ];
   const wsC=XLSX.utils.aoa_to_sheet(comp);
-  wsC['!cols']=[{wch:24},{wch:14},{wch:14},{wch:10},{wch:18}];
+  wsC['!cols']=[{wch:22},{wch:14},{wch:14},{wch:10},{wch:18}];
   XLSX.utils.book_append_sheet(wb,wsC,'Comparação');
-
-  XLSX.writeFile(wb,`comparacao_${name.replace(/\s/g,'_')}.xlsx`);
+  XLSX.writeFile(wb,'horario_'+linha+'.xlsx');
 }
 
-updateScenario('a');updateScenario('b');
+// Inicialização
+const sel=document.getElementById('linha-sel');
+Object.keys(KM_DATA).sort().forEach(k=>{
+  const opt=document.createElement('option');opt.value=k;opt.textContent='Linha '+k;sel.appendChild(opt);
+});
+initMap();
+updateS('a');updateS('b');
 </script>
+</body>
+</html>
