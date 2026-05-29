@@ -122,8 +122,8 @@ td{padding:6px 8px;color:var(--ink)}
     </div>
     <div id="map"></div>
     <div class="map-legend">
-      <div class="map-legend-item"><div class="map-dot" style="background:#009FD4"></div><span>Ida</span></div>
-      <div class="map-legend-item"><div class="map-dot" style="background:#F59E0B"></div><span>Volta</span></div>
+      <div class="map-legend-item"><div class="map-dot" style="background:#1E3A8A"></div><span>Ida</span></div>
+      <div class="map-legend-item"><div class="map-dot" style="background:#DC2626"></div><span>Volta</span></div>
       <span id="map-status" class="status-msg" style="color:var(--ink3)"></span>
     </div>
   </div>
@@ -276,10 +276,10 @@ function loadLinhaOnMap(key){
     const featIda=data.features.filter(f=>f.properties.Name.split(' ')[0]===key&&f.properties.FolderPath.includes('Ida'));
     const featVolta=data.features.filter(f=>f.properties.Name.split(' ')[0]===key&&f.properties.FolderPath.includes('Volta'));
     if(featIda.length){
-      layerIda=L.geoJSON({type:'FeatureCollection',features:featIda},{style:{color:'#009FD4',weight:3,opacity:.9}}).addTo(map);
+      layerIda=L.geoJSON({type:'FeatureCollection',features:featIda},{style:{color:'#1E3A8A',weight:5,opacity:.9}}).addTo(map);
     }
     if(featVolta.length){
-      layerVolta=L.geoJSON({type:'FeatureCollection',features:featVolta},{style:{color:'#F59E0B',weight:3,opacity:.9}}).addTo(map);
+      layerVolta=L.geoJSON({type:'FeatureCollection',features:featVolta},{style:{color:'#DC2626',weight:5,opacity:.9}}).addTo(map);
     }
     if(layerIda||layerVolta){
       let combined=(layerIda||layerVolta).getBounds();
@@ -393,10 +393,11 @@ function addDesdobramento(){
   div.id='db-'+id;
   div.style.cssText='background:var(--white);border:0.5px solid var(--border);border-radius:6px;padding:10px;margin-bottom:8px';
   div.innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:end">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr auto;gap:6px;align-items:end">
       <div class="field"><label>Partida</label><input type="time" id="db-dep-${id}" value="07:00"></div>
+      <div class="field"><label>Chegada</label><input type="time" id="db-arr-${id}" value="07:25"></div>
       <div class="field"><label>Descrição</label><input type="text" id="db-desc-${id}" placeholder="ex: Merelim – Av. Central"></div>
-      <div class="field"><label>Kms (ida+volta)</label><input type="number" id="db-km-${id}" value="0" step="0.1" min="0"></div>
+      <div class="field"><label>Kms</label><input type="number" id="db-km-${id}" value="0" step="0.1" min="0"></div>
       <button class="btn btn-danger btn-sm" onclick="removeDb(${id})" style="margin-bottom:0">✕</button>
     </div>`;
   document.getElementById('db-list').appendChild(div);
@@ -410,6 +411,7 @@ function getDesdobramentos(){
     const id=el.id.replace('db-dep-','');
     dbs.push({
       dep:el.value,
+      arr:(document.getElementById('db-arr-'+id)||{}).value||'—',
       desc:(document.getElementById('db-desc-'+id)||{}).value||'Desdobramento',
       km:parseFloat((document.getElementById('db-km-'+id)||{}).value)||0,
     });
@@ -425,7 +427,7 @@ function generateAll(){
   const rB=buildRows(pB,cB);
 
   dbs.forEach(db=>{
-    rB.push({dep:db.dep,arr:'—',ret:'—',vl:'D',vc:{bg:'#FEF3C7',tc:'#92400E'},isLast:false,tipo:'desdobramento',desc:db.desc,km:db.km});
+    rB.push({dep:db.dep,arr:db.arr,ret:'—',vl:'D',vc:{bg:'#FEF3C7',tc:'#92400E'},isLast:false,tipo:'desdobramento',desc:db.desc,km:db.km});
   });
   rB.sort((a,b)=>toMin(a.dep)-toMin(b.dep));
 
